@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean balanceCheck(int userId) {
-        User user = userDao.getById(userId).orElse(null);
+        User user = userDao.findById(userId).orElse(null);
         if (user.getUserBalance() >= 6)
             return true;
         else

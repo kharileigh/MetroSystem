@@ -15,13 +15,13 @@ public class StationServiceImpl implements StationService {
     @Override
     public double checkRoute(String sourceStation, String destinationStation) {
         Station sourceStationObject = stationDao.getStationByStationName(sourceStation);
-        Station destinationStationObject = stationDao.getStationByStationname(destinationStation);
+        Station destinationStationObject = stationDao.getStationByStationName(destinationStation);
         int source = sourceStationObject.getStationId();
         int destination = destinationStationObject.getStationId();
 
         int distance;
 
-        if (source = destination)
+        if (source == destination)
             return 0;
         else if (source > destination) {
             distance = source - destination;

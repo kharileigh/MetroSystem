@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
  public interface StationDao extends JpaRepository<Station, Integer>{
-    public Station getStationBystationName(String stationName);
+    public Station getStationByStationName(String stationName);
        
 }
 
