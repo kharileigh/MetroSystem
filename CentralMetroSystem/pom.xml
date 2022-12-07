@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.five</groupId>
-	<artifactId>client</artifactId>
+	<artifactId>CentralMetroSystem</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>client</name>
+	<name>CentralMetroSystem</name>
 	<description>A central metro system utilising a Spring MVC design pattern with Spring Boot. Collaborators : Lidija Celik, Khari - Leigh Miller, Priyanka Patel, Stephanie Wright, Victoria Ayoade.</description>
 	<properties>
 		<java.version>11</java.version>
