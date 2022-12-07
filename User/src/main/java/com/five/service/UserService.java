@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 
 public interface UserService {
 
-    boolean loginCheck(int userId, String userPassword);
+    User loginCheck(int userId, String userPassword);
 
     boolean balanceCheck(int userId);
     User updateBalance(int userid, double price);
+
+    User createUser(User user);
 }

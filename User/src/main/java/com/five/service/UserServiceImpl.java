@@ -12,14 +12,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean loginCheck(int userId, String userPassword) {
+    public User loginCheck(int userId, String userPassword) {
         try {
             User user = userDao.getUserByUserIdAndUserPassword(userId, userPassword);
             if (user != null)
-                return true;
-            return false;
+                return user;
+            return null;
         } catch (Exception ex) {
-            return false;
+            return null;
         }
     }
 
@@ -38,5 +38,15 @@ public class UserServiceImpl implements UserService {
         user.setUserBalance(user.getUserBalance() + amount);
         userDao.save(user);
         return user;
+    }
+
+    @Override
+    public User createUser(User user) {
+        if (userDao.findById(user.getUserId()) == null) {
+            userDao.save(user);
+            return user;
+        } else {
+            return null;
+        }
     }
 }
