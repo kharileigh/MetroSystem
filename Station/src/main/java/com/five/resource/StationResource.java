@@ -1,6 +1,6 @@
-package com.fice.resource;
+package com.five.resource;
 
-import com.fice.service.StationService;
+import com.five.service.StationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

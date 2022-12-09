@@ -1,4 +1,4 @@
-package com.fice.entity;
+package com.five.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

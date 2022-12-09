@@ -1,7 +1,7 @@
-package com.fice.service;
+package com.five.service;
 
-import com.fice.entity.Station;
-import com.fice.persistence.StationDao;
+import com.five.entity.Station;
+import com.five.persistence.StationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
