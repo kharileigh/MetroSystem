@@ -10,7 +10,7 @@ CREATE TABLE User(
 userId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 userName VARCHAR(25) NOT NULL,
 userPassword VARCHAR(25) NOT NULL,
-userBalance DOUBLE NOT NULL
+userBalance DECIMAL(15, 2) NOT NULL
 );
 
 -- STATION:
@@ -29,7 +29,6 @@ VALUES("Alison", "hello", 5),
 ("Steph", "edge", 19),
 ("Vic", "root", 20),
 ("Sam", "rock", 23);
-
 
 -- STATION:
 INSERT INTO Station
