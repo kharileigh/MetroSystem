@@ -8,6 +8,8 @@ package com.five.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -18,11 +20,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "") // ADD NAME ONCE DATABASE COMPLETED
+@Table(name = "Central Metro System") 
 public class MetroSystem {
     
     
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int fareId;
     private int userId;
     private BigDecimal starterBalance;

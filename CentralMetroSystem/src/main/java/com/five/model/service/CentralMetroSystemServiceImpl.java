@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class CentralMetroSystemServiceImpl implements CentralMetroSystemService {
@@ -20,36 +21,79 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     // INJECT DEPENDENCY
     @Autowired
     private CentralMetroSystemDao metroDao;
+    private RestTemplate restTemplate;
     
 
     @Override
-    public User loginCheck() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public User loginCheck(int userId, String userPassword) {
+        
+        User user = restTemplate.getForObject("http://localhost:8084/users/" + userId + "/" + userPassword, User.class);
+        
+        return user;
+        
     }
+    
 
     @Override
-    public String balanceCheck() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String balanceCheck(int userId) {
+        
+        String balanceStatus = restTemplate.getForObject("http://localhost:8084/users/" + userId, String.class);
+        
+        return balanceStatus;
     }
+    
+    
 
     @Override
-    public User updateBalance() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public User updateBalance(int userId, BigDecimal amount) {
+        
+        User user = restTemplate.getForObject("http://localhost:8084/users/" + userId + "/" + amount, User.class);
+        
+        return user;
     }
 
+    
     @Override
-    public BigDecimal checkRoute() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public BigDecimal checkRoute(String sourceStation, String destinationStation) {
+        
+        BigDecimal route = restTemplate.getForObject("http://localhost:8082/stations/" + sourceStation + "/" + destinationStation, BigDecimal.class);
+        
+        return route;
+        
     }
+    
 
     @Override
     public MetroSystem calculateTravelCost(int userId, BigDecimal starterBalance, BigDecimal remainingBalance, BigDecimal price, String sourceStation, String destinationStation, Date sourceSwipeInDateAndTime, Date destinationSwipeOutDateAndTime) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        
+        MetroSystem metroSystem = new MetroSystem();
+        
+        metroSystem.setUserId(userId);
+        metroSystem.setStarterBalance(starterBalance);
+        metroSystem.setRemainingBalance(remainingBalance);
+        metroSystem.setPrice(price);
+        metroSystem.setSourceStation(sourceStation);
+        metroSystem.setDestinationStation(destinationStation);
+        metroSystem.setSourceSwipeInDateAndTime(sourceSwipeInDateAndTime);
+        metroSystem.setDestinationSwipeOutDateAndTime(destinationSwipeOutDateAndTime);
+        
+        // SAVES TO DATABASE
+        metroDao.save(metroSystem);
+        
+        return metroSystem;
     }
 
+    
     @Override
     public MetroSystemList showTransactionHistory(int userId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        MetroSystemList metroSystemList = new MetroSystemList();
+        
+        // SETS FARES AND UPDATES DATABASE
+        metroSystemList.setFares(metroDao.searchMetroSystemByUserId(userId));
+        
+        return metroSystemList;
     }
     
 }

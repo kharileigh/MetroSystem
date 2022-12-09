@@ -14,14 +14,14 @@ import java.util.Date;
 
 public interface CentralMetroSystemService {
     
-    public User loginCheck();
+    public User loginCheck(int userId, String userPassword);
     
-    public String balanceCheck();
+    public String balanceCheck(int userId);
     
-    public User updateBalance();
+    public User updateBalance(int userId, BigDecimal amount);
     
     // RETURNS PRICE OF ROUTE
-    public BigDecimal checkRoute();
+    public BigDecimal checkRoute(String sourceStation, String destinationStation);
     
     public MetroSystem calculateTravelCost(int userId, BigDecimal starterBalance, BigDecimal remainingBalance, BigDecimal price, String sourceStation, String destinationStation, Date sourceSwipeInDateAndTime, Date destinationSwipeOutDateAndTime);
     
