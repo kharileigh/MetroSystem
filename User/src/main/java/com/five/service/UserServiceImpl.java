@@ -5,10 +5,15 @@ import com.five.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
+
+    private static final BigDecimal MINIMUM_BALANCE = new BigDecimal("6.00");
+
 
 
     @Override
@@ -26,16 +31,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean balanceCheck(int userId) {
         User user = userDao.findById(userId).orElse(null);
-        if (user.getUserBalance() >= 6)
+        if (user.getUserBalance().compareTo(MINIMUM_BALANCE) >=0)
             return true;
         else
             return false;
     }
 
     @Override
-    public User updateBalance(int userId, double amount) {
+    public User updateBalance(int userId, BigDecimal amount) {
         User user = userDao.getById(userId);
-        user.setUserBalance(user.getUserBalance() + amount);
+        user.setUserBalance(user.getUserBalance().add(amount));
         userDao.save(user);
         return user;
     }

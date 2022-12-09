@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 public class UserResource {
 
@@ -34,7 +36,7 @@ public class UserResource {
     }
 
     @PutMapping(path = "/users/{userId}/{amount}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public User updateBalanceResource(@PathVariable("userId") int userId, @PathVariable("amount") double amount) {
+    public User updateBalanceResource(@PathVariable("userId") int userId, @PathVariable("amount") BigDecimal amount) {
         return userService.updateBalance(userId, amount);
     }
 

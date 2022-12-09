@@ -1,6 +1,8 @@
 package com.fice.service;
 
+import java.math.BigDecimal;
+
 public interface StationService {
 
-    double checkRoute(String sourceStation, String destinationStation);
+    BigDecimal checkRoute(String sourceStation, String destinationStation);
 }
