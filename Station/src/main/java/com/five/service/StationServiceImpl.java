@@ -13,12 +13,12 @@ public class StationServiceImpl implements StationService {
     @Autowired
     private StationDao stationDao;
 
-    private static final BigDecimal ADJACENT_COST = new BigDecimal("1.50");
+    private static final double ADJACENT_COST = 1.50;
 
 
 
     @Override
-    public BigDecimal checkRoute(String sourceStation, String destinationStation) {
+    public double checkRoute(String sourceStation, String destinationStation) {
         Station sourceStationObject = stationDao.getStationByStationName(sourceStation);
         Station destinationStationObject = stationDao.getStationByStationName(destinationStation);
         int source = sourceStationObject.getStationId();
@@ -27,14 +27,14 @@ public class StationServiceImpl implements StationService {
         int distance;
 
         if (source == destination)
-            return new BigDecimal("0.00");
+            return 0;
         else if (source > destination) {
             distance = source - destination;
         } else {
             distance = destination - source;
         }
 
-        BigDecimal price = ADJACENT_COST.multiply(new BigDecimal(String.valueOf(distance)));
+        double price = ADJACENT_COST * distance;
 
         return price;
 

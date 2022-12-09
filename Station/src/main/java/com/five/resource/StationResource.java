@@ -16,7 +16,7 @@ public class StationResource {
     StationService stationService;
 
     @GetMapping(path = "/stations/{sourceStation}/{destinationStation}", produces = MediaType.TEXT_PLAIN_VALUE)
-    public BigDecimal checkRouteResource(@PathVariable("sourceStation") String sourceStation, @PathVariable("destinationStation") String destinationStation) {
+    public double checkRouteResource(@PathVariable("sourceStation") String sourceStation, @PathVariable("destinationStation") String destinationStation) {
         return stationService.checkRoute(sourceStation,destinationStation);
     }
 

@@ -11,7 +11,7 @@ public interface UserService {
     User loginCheck(int userId, String userPassword);
 
     boolean balanceCheck(int userId);
-    User updateBalance(int userid, BigDecimal amount);
+    boolean updateBalance(int userid, double amount);
 
     User createUser(User user);
 }

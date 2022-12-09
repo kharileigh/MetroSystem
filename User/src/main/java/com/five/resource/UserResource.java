@@ -35,9 +35,12 @@ public class UserResource {
             return "Balance is below limit";
     }
 
-    @PutMapping(path = "/users/{userId}/{amount}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public User updateBalanceResource(@PathVariable("userId") int userId, @PathVariable("amount") BigDecimal amount) {
-        return userService.updateBalance(userId, amount);
+    @PutMapping(path = "/users/{userId}/{amount}", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String updateBalanceResource(@PathVariable("userId") int userId, @PathVariable("amount") double amount) {
+        if (userService.updateBalance(userId, amount))
+            return "Balance successfully updated";
+        else
+            return "Something went wrong.";
     }
 
 }

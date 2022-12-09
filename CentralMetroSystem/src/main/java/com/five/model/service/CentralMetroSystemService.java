@@ -18,12 +18,12 @@ public interface CentralMetroSystemService {
     
     public String balanceCheck(int userId);
     
-    public User updateBalance(int userId, BigDecimal amount);
+    public User updateBalance(int userId, double amount);
     
     // RETURNS PRICE OF ROUTE
-    public BigDecimal checkRoute(String sourceStation, String destinationStation);
+    public double checkRoute(String sourceStation, String destinationStation);
     
-    public MetroSystem calculateTravelCost(int userId, BigDecimal starterBalance, BigDecimal remainingBalance, BigDecimal price, String sourceStation, String destinationStation, Date sourceSwipeInDateAndTime, Date destinationSwipeOutDateAndTime);
+    public MetroSystem calculateTravelCost(int userId, double starterBalance, double remainingBalance, double price, String sourceStation, String destinationStation, Date sourceSwipeInDateAndTime, Date destinationSwipeOutDateAndTime);
     
     public MetroSystemList showTransactionHistory(int userId);
     

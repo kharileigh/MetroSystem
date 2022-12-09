@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    private static final BigDecimal MINIMUM_BALANCE = new BigDecimal("6.00");
+    private static final double MINIMUM_BALANCE = 6;
 
 
 
@@ -31,18 +31,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean balanceCheck(int userId) {
         User user = userDao.findById(userId).orElse(null);
-        if (user.getUserBalance().compareTo(MINIMUM_BALANCE) >=0)
+        if (user.getUserBalance() >= 6)
             return true;
         else
             return false;
     }
 
     @Override
-    public User updateBalance(int userId, BigDecimal amount) {
+    public boolean updateBalance(int userId, double amount) {
         User user = userDao.getById(userId);
-        user.setUserBalance(user.getUserBalance().add(amount));
-        userDao.save(user);
-        return user;
+        if (user != null) {
+            user.setUserBalance(user.getUserBalance() + amount);
+            userDao.save(user);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

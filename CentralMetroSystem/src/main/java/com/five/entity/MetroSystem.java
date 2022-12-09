@@ -28,9 +28,9 @@ public class MetroSystem {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int fareId;
     private int userId;
-    private BigDecimal starterBalance;
-    private BigDecimal remainingBalance;
-    private BigDecimal price;
+    private double starterBalance;
+    private double remainingBalance;
+    private double price;
     private String sourceStation;
     private String destinationStation;
     private Date sourceSwipeInDateAndTime;

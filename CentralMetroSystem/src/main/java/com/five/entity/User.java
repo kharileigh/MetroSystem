@@ -18,10 +18,10 @@ public class User {
     private int userId;
     private String userName;
     private String userPassword;
-    private BigDecimal userBalance;
+    private double userBalance;
 
     //constructor without userId so that the database can auto-increment
-    public User(String userName, String userPassword, BigDecimal userBalance) {
+    public User(String userName, String userPassword, double userBalance) {
         this.userName = userName;
         this.userPassword = userPassword;
         this.userBalance = userBalance;

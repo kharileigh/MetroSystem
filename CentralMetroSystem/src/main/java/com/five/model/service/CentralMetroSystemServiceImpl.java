@@ -45,7 +45,7 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     
 
     @Override
-    public User updateBalance(int userId, BigDecimal amount) {
+    public User updateBalance(int userId, double amount) {
         
         User user = restTemplate.getForObject("http://localhost:8084/users/" + userId + "/" + amount, User.class);
         
@@ -54,9 +54,9 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
 
     
     @Override
-    public BigDecimal checkRoute(String sourceStation, String destinationStation) {
+    public double checkRoute(String sourceStation, String destinationStation) {
         
-        BigDecimal route = restTemplate.getForObject("http://localhost:8082/stations/" + sourceStation + "/" + destinationStation, BigDecimal.class);
+        double route = restTemplate.getForObject("http://localhost:8082/stations/" + sourceStation + "/" + destinationStation, Double.class);
         
         return route;
         
@@ -64,7 +64,7 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     
 
     @Override
-    public MetroSystem calculateTravelCost(int userId, BigDecimal starterBalance, BigDecimal remainingBalance, BigDecimal price, String sourceStation, String destinationStation, Date sourceSwipeInDateAndTime, Date destinationSwipeOutDateAndTime) {
+    public MetroSystem calculateTravelCost(int userId, double starterBalance, double remainingBalance, double price, String sourceStation, String destinationStation, Date sourceSwipeInDateAndTime, Date destinationSwipeOutDateAndTime) {
         
         
         MetroSystem metroSystem = new MetroSystem();
