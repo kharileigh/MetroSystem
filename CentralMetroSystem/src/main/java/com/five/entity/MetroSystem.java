@@ -5,6 +5,7 @@
 
 package com.five.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,12 +25,12 @@ public class MetroSystem {
     @Id
     private int fareId;
     private int userId;
-    private double starterBalance;
-    private double remainingBalance;
-    private double price;
+    private BigDecimal starterBalance;
+    private BigDecimal remainingBalance;
+    private BigDecimal price;
     private String sourceStation;
     private String destinationStation;
     private Date sourceSwipeInDateAndTime;
-    private Date destinationSwipeOutDateAbdTime;
+    private Date destinationSwipeOutDateAndTime;
     
 }
