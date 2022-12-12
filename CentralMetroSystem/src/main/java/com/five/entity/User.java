@@ -5,13 +5,13 @@
 
 package com.five.entity;
 
-import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class User {
     
@@ -19,6 +19,11 @@ public class User {
     private String userName;
     private String userPassword;
     private double userBalance;
+    
+    // default constructor
+    public User() {
+    
+    }
 
     //constructor without userId so that the database can auto-increment
     public User(String userName, String userPassword, double userBalance) {

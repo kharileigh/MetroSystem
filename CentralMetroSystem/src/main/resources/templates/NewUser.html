@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://thymeleaf.org" >
+<head>
+    <title> Central Metro System </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- External Cascading Style Sheet -->
+    <link th:href="@{/styles/metro.css}" rel="stylesheet" />
+</head>
+<body>
+    
+<!-- NAV -->
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="button-container">
+        <a class="navbar-image" href="#">
+            <img alt="MetroLogo" th:src="@{/images/metro.gif}">
+        </a>
+        </div>
+        <h1> Create New Account </h1>
+    </div>
+</nav>
+  
+<br></br>
+
+<!-- MAIN CONTENT -->
+<div class="main-container">
+    
+    <!-- NEW USER FORM -->
+    <form action="./newUser" method="post">
+        
+        <table>
+            
+            <!-- title of form -->
+            <tr>
+                <td>
+                    <h3> Please enter your details : </h3>
+                    <br></br>
+                    <h3 th:text="${message}"></h3>
+                </td>
+            </tr>
+            
+            <!-- user name input -->
+            <tr>
+                <td>
+                    <input type="text" name="userName" placeholder="Your Username" required />
+                </td>
+            </tr>
+            
+            <!-- user password input -->
+            <tr>
+                <td>
+                    <input type="password" name="userPassword" placeholder="Your Password" required />
+                </td>
+            </tr>
+            
+            <!-- user balance input (String value) -->
+            <tr>
+                <td>
+                    <input type="text" name="userBalance" placeholder="Your Current Balance" required />
+                </td>
+            </tr>
+            
+            <!-- submit -->
+            <tr>
+                <td>
+                    <input type="submit" value="Submit" class="form-button" required />
+                </td>
+            </tr>
+            
+        </table>
+        
+    </form>
+</div>
+    
+    
+</body>
+</html>

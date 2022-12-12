@@ -5,11 +5,9 @@ import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class User {
@@ -19,6 +17,11 @@ public class User {
 	private String userName;
 	private String userPassword;
 	private double userBalance;
+        
+        // default constructor
+        public User() {
+        
+        }
 
 	//constructor without userId so that the database can auto-increment
 	public User(String userName, String userPassword, double userBalance) {

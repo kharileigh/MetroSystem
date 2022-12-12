@@ -5,8 +5,7 @@
 
 package com.five.entity;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +21,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "Central Metro System") 
+@Table(name = "CentralMetroSystem") 
 public class MetroSystem {
     
     
@@ -35,7 +34,7 @@ public class MetroSystem {
     private double price;
     private String sourceStation;
     private String destinationStation;
-    private Date sourceSwipeInDateAndTime;
-    private Date destinationSwipeOutDateAndTime;
+    private LocalDate sourceSwipeInDateAndTime;
+    private LocalDate destinationSwipeOutDateAndTime;
     
 }

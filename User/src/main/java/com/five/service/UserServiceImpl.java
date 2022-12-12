@@ -5,7 +5,6 @@ import com.five.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,9 +16,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User loginCheck(int userId, String userPassword) {
+    public User loginCheck(String userName, String userPassword) {
         try {
-            User user = userDao.getUserByUserIdAndUserPassword(userId, userPassword);
+            User user = userDao.getUserByUserNameAndUserPassword(userName, userPassword);
             if (user != null)
                 return user;
             return null;
@@ -51,10 +50,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        if (userDao.findById(user.getUserId()) == null) {
+       
+        if(userDao.getUserByUserNameAndUserPassword(user.getUserName(), user.getUserPassword()) != null) {
+            
             userDao.save(user);
             return user;
+            
         } else {
+        
             return null;
         }
     }

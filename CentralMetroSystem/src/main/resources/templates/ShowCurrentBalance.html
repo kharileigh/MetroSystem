@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://thymeleaf.org" >
+<head>
+    <title> Central Metro System </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <!-- External Cascading Style Sheet -->
+    <link th:href="@{/styles/metro.css}" rel="stylesheet" />
+</head>
+<body>
+    
+    <!-- NAV -->
+<nav class="navbar">
+    <div class="container-fluid">
+        <div class="button-container">
+        <a class="navbar-image" href="#">
+            <img alt="MetroLogo" th:src="@{/images/metro.gif}">
+        </a>
+        </div>
+        <!--  Top Up Balance </h1> --><h1>
+    </div>
+</nav>
+  
+<br></br>
+
+<!-- MAIN CONTENT -->
+<div class="main-container">
+    
+    <!-- table showing balance -->    
+    <table>
+
+        <!-- title of form -->
+        <tr>
+            <td>
+                <h3> Current Balance : </h3>
+            </td>
+        </tr>
+
+        <!-- display balance -->
+        <tr>
+            <td class="show-balance" th:text="user.userBalance">
+        </tr>
+        
+        <!-- return to home -->
+        <tr>
+            <td class="return-to-home">
+                <a href="./home"> Return To Home</a>
+            </td>
+        </tr>
+
+
+    </table>
+        
+   
+</div>
+    
+    
+</body>
+</html>

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -25,10 +26,7 @@ public class CentralMetroSystemController {
     @Autowired
     CentralMetroSystemService metroSystemService;
     
-    @Autowired
     String start;
-    
-    @Autowired
     String stop;
     
     
@@ -47,14 +45,80 @@ public class CentralMetroSystemController {
         return new ModelAndView("Login");
     }
     
+    // TO BE DONE
+    @RequestMapping("/login")
+    public ModelAndView loginController(@RequestParam("userName") String userName, @RequestParam("userPassword") String password, HttpSession session) {
     
+        ModelAndView modelAndView = new ModelAndView();
+        
+        User user = metroSystemService.loginCheck(userName, password);
+        
+        String message;
+        
+        // successful login
+        if(user != null) {
+            
+            modelAndView.setViewName("HomePage");
+            modelAndView.addObject("user", user);
+            session.setAttribute("user", user);
+        
+        // failed login
+        } else {
+        
+            message = "Incorrect login details, please try again";
+            modelAndView.addObject("message", message);
+            modelAndView.setViewName("Login");
+       
+        }
+            
+        return modelAndView;
+    }
 
+    
     //==========================================================================
     //------ CREATE NEW USER PAGE
     @RequestMapping("/newUserPage")
     public ModelAndView newUserPageController() {
     
         return new ModelAndView("NewUser");
+    }
+    
+    // TO BE DONE
+    @RequestMapping("/newUser")
+    public ModelAndView newUserController(@RequestParam("userName") String userName, @RequestParam("userPassword") String userPassword, @RequestParam("userBalance") String userBalance, HttpSession session) {
+    
+        ModelAndView modelAndView = new ModelAndView();
+        
+        User newUser = new User();
+        
+        newUser.setUserName(userName);
+        newUser.setUserPassword(userPassword);
+        
+        Double balance = Double.parseDouble(userBalance);
+        newUser.setUserBalance(balance);
+        
+        metroSystemService.addNewUser(newUser.getUserName(), newUser.getUserPassword(), newUser.getUserBalance());
+        
+        String message;
+        
+        // successfully added a new user
+        if(newUser != null) {
+            
+            modelAndView.setViewName("HomePage");
+            modelAndView.addObject("newUser", newUser);
+            session.setAttribute("newUser", newUser);
+        
+        // falls to create new user
+        } else {
+        
+            message = "Failed to Create New User, please try new details";
+            modelAndView.addObject("message", message);
+            modelAndView.setViewName("NewUser");
+        
+        }
+        
+    
+        return modelAndView;
     }
     
     
@@ -66,7 +130,7 @@ public class CentralMetroSystemController {
         return new ModelAndView("HomePage");
     }
     
-    
+    // NEED TO FIGURE OUT SETTING DATE & TIME & PRICE
     //==========================================================================
     //-------- SWIPES IN PAGE
     @RequestMapping("/swipesInPage")
@@ -90,7 +154,9 @@ public class CentralMetroSystemController {
     	} else 
     		start = station.getStationName();
     		
+                // set 
     		metroSystem.setSourceStation(start);
+                metroSystem.setStarterBalance(user.getUserBalance());
     	
     		request.getParameter("stationName");
     	
@@ -103,7 +169,7 @@ public class CentralMetroSystemController {
     		return modelAndView;
     }
     
-    
+    // NEED TO FIGURE OUT SETTING DATE & TIME & PRICE - MUST REDIRECT TO USER TRANSACTION PAGE (breakdown of journey and cost)
     //==========================================================================
     //--------- SWIPES OUT PAGE
     @RequestMapping("/swipesOutPage")
@@ -130,6 +196,7 @@ public class CentralMetroSystemController {
                 metroSystem.setDestinationStation(stop);
     	
     		metroSystemService.checkRoute(start, stop);
+                metroSystem.setRemainingBalance(user.getUserBalance());
     	
                 message = "You have successfully swiped out at" + stop + " with current balance a " +  metroSystem.getRemainingBalance();
     	
@@ -181,8 +248,26 @@ public class CentralMetroSystemController {
         
     }
 
+    //==========================================================================
+    //------- SHOW CURRENT BALANCE
+    @RequestMapping("/showCurrentBalancePage")
+    public ModelAndView login=PageController() {
+    
+        return new ModelAndView("ShowCurrentBalance");
+    }
+    
     
     //==========================================================================
+    //------ PRINT USER TICKET
     
+    
+    
+    //==========================================================================
+    //------- SHOW ALL TRANSACTIONS
+    
+    
+    
+    //==========================================================================
+    //-------  SHOW TRANSACTIONS BY DATE
 }
 

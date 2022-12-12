@@ -8,9 +8,15 @@ import com.five.entity.MetroSystem;
 import com.five.entity.MetroSystemList;
 import com.five.entity.User;
 import com.five.model.persistence.CentralMetroSystemDao;
-import java.math.BigDecimal;
-import java.util.Date;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,13 +27,55 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     // INJECT DEPENDENCY
     @Autowired
     private CentralMetroSystemDao metroDao;
+    
+    @Autowired
     private RestTemplate restTemplate;
+    
+    
+    @Override
+    public User addNewUser(String userName, String userPassword, double userBalance) {
+           
+        User newUser = new User();
+        
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+                
+            URI url = new URI("http://localhost:8084/newUser");
+
+            
+            newUser.setUserName(userName);
+            newUser.setUserPassword(userPassword);
+            newUser.setUserBalance(userBalance);
+            HttpEntity<User> requestEntity = new HttpEntity<>(newUser, headers);
+
+            ResponseEntity<User> responseEntity = restTemplate.postForEntity(url, requestEntity, User.class);
+
+
+            // check user has been added
+            if(!("User not added").equals(responseEntity)) {
+                
+                return loginCheck(userName, userPassword);
+                
+            } else {
+                
+                return null;
+                
+                // user successfully added - immediately logs user in
+            }
+            
+        } catch (URISyntaxException ex) {
+        
+        }
+        
+        return newUser;
+    }
     
 
     @Override
-    public User loginCheck(int userId, String userPassword) {
+    public User loginCheck(String userName, String userPassword) {
         
-        User user = restTemplate.getForObject("http://localhost:8084/users/" + userId + "/" + userPassword, User.class);
+        User user = restTemplate.getForObject("http://localhost:8084/users/" + userName + "/" + userPassword, User.class);
         
         return user;
         
@@ -64,7 +112,7 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     
 
     @Override
-    public MetroSystem calculateTravelCost(int userId, double starterBalance, double remainingBalance, double price, String sourceStation, String destinationStation, Date sourceSwipeInDateAndTime, Date destinationSwipeOutDateAndTime) {
+    public MetroSystem calculateTravelCost(int userId, double starterBalance, double remainingBalance, double price, String sourceStation, String destinationStation, LocalDate sourceSwipeInDateAndTime, LocalDate destinationSwipeOutDateAndTime) {
         
         
         MetroSystem metroSystem = new MetroSystem();
@@ -95,5 +143,7 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
         
         return metroSystemList;
     }
+
+    
     
 }

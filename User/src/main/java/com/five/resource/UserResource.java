@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 
 @RestController
 public class UserResource {
@@ -14,12 +13,12 @@ public class UserResource {
     @Autowired
     UserService userService;
 
-    @GetMapping(path="/users/{userId}/{userPassword}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public User loginCheckResource(@PathVariable("userId") int userId, @PathVariable("userPassword") String userPassword) {
-        return userService.loginCheck(userId, userPassword);
+    @GetMapping(path="/users/{userName}/{userPassword}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public User loginCheckResource(@PathVariable("userName") String userName, @PathVariable("userPassword") String userPassword) {
+        return userService.loginCheck(userName, userPassword);
     }
 
-    @PostMapping(path = "/users/", produces = MediaType.TEXT_PLAIN_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/newUser", produces = MediaType.TEXT_PLAIN_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public String createUserResource(@RequestBody User user) {
         if (userService.createUser(user) == null)
             return "User was not added.";
