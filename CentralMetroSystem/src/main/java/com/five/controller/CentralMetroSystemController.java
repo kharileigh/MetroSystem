@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -25,60 +24,69 @@ public class CentralMetroSystemController {
     
     @Autowired
     CentralMetroSystemService metroSystemService;
+    
     @Autowired
     String start;
+    
     @Autowired
     String stop;
     
-    //Landing Page
+    
+    //----- LANDING PAGE
     @RequestMapping("/")
     public ModelAndView getLandingPage() {
     	return new ModelAndView("LandingPage");
     }
     
     
-    
-    // LOGIN PAGE 
-    @RequestMapping("/login")
+    //==========================================================================
+    //----- LOGIN PAGE
+    @RequestMapping("/loginPage")
     public ModelAndView loginPageController() {
     
         return new ModelAndView("Login");
     }
     
+    
 
-    // CREATE ACCOUNT PAGE 
-    @RequestMapping("/newUser")
+    //==========================================================================
+    //------ CREATE NEW USER PAGE
+    @RequestMapping("/newUserPage")
     public ModelAndView newUserPageController() {
     
         return new ModelAndView("NewUser");
     }
     
-     //Create HOME page
+    
+    //==========================================================================
+     //------ HOMEPAGE
     @RequestMapping("/home")
-    public ModelAndView HomePageontroller() {
+    public ModelAndView HomePageController() {
     
         return new ModelAndView("HomePage");
     }
     
-    //User Swipes In Page
+    
+    //==========================================================================
+    //-------- SWIPES IN PAGE
     @RequestMapping("/swipesInPage")
     public ModelAndView swipepesInPageController() {
-    	return new ModelAndView("swipesInPage");
+    	return new ModelAndView("SwipesInPage");
     }
     
     
-    //Swipes in method
+    //--------- SWIPES IN METHOD
     @RequestMapping("/swipesIn")
     public ModelAndView swipesInController(@ModelAttribute("user") User user, @ModelAttribute("station") Station station, HttpServletRequest request, HttpSession session) {
     	MetroSystem metroSystem =  new MetroSystem();
     	
-    	ModelAndView modelAndView=new ModelAndView();
+    	ModelAndView modelAndView = new ModelAndView();
     	
     	String message = null;
     	
     	if(metroSystemService.balanceCheck(user.getUserId()) != null) {
     		if(user.getUserBalance() <= 6)
-    			message = "The amount" +user.getUserBalance() + " is less than required";
+                    message = "The amount" +user.getUserBalance() + " is less than required";
     	} else 
     		start = station.getStationName();
     		
@@ -96,48 +104,85 @@ public class CentralMetroSystemController {
     }
     
     
-    //User Swipes Out Page
+    //==========================================================================
+    //--------- SWIPES OUT PAGE
     @RequestMapping("/swipesOutPage")
     public ModelAndView swipepesOutPageController() {
     	return new ModelAndView("swipesOutPage");
     }
     
-  //Swipes out method
+    //--------- SWIPES OUT METHOD
     @RequestMapping("/swipesOut")
-    public ModelAndView swipesOutController(@RequestParam("adjacent_cost") double adjacent_cost, @RequestParam("userBalance")  double userBalance, @RequestParam("stationName") String stationName, @RequestParam("userId") int userId, HttpServletRequest request, HttpSession session) {
+    public ModelAndView swipesOutController(@ModelAttribute("user") User user, @ModelAttribute("station") Station station, HttpServletRequest request, HttpSession session) {
     	
-    	ModelAndView modelAndView=new ModelAndView();
+        MetroSystem metroSystem = new MetroSystem();
+        
+    	ModelAndView modelAndView = new ModelAndView();
     	
     	String message = null;
     	String stop = null;
     	
-    	if(metroSystemService.balanceCheck(userId) != null)
+        // SUCCESSFULLY SWIPES OUT USER
+    	if(metroSystemService.balanceCheck(user.getUserId()) != null) {
     		
-    		stop = request.getParameter("stationName");
+    		stop = station.getStationName();
+                
+                metroSystem.setDestinationStation(stop);
     	
     		metroSystemService.checkRoute(start, stop);
     	
+                message = "You have successfully swiped out at" + stop + " with current balance a " +  metroSystem.getRemainingBalance();
     	
-    	message = "You have successfully swiped out at" + stationName + " with current balance a s" + ;
+        // FAILS TO SWIPE OUT USER	
+    	} else {        
+            
+            message = "The amount" + user.getUserBalance() + " is less than required. Please top up";
+        }
     	
-    	if (metroSystemService.balanceCheck(userId) != null) {
-    		
-    		if(userBalance <= 6)
-    			message = "The amount" + userBalance + " is less than required";
-    	} else 
-    		
-    	
-    		
-    	
-    		modelAndView.addObject("message", message);
-    	    session.setAttribute("stop", stop);
-    		modelAndView.setViewName("Output");
-    		
-    		return modelAndView;
-    
+            modelAndView.addObject("message", message);
+            session.setAttribute("stop", stop);
+            modelAndView.setViewName("Output");
+            return modelAndView;
     
     }   
 
     
+    //==========================================================================
+    // TOP UP BALANCE PAGE
+    @RequestMapping("/topUpBalancePage")
+    public ModelAndView topUpBalancePageController() {
+        return new ModelAndView("TopUpBalancePage");
+    }
+    
+    // TOP UP BALANCE METHOD
+    @RequestMapping("/topUpBalance")
+    public ModelAndView topUpBalanceController(@ModelAttribute("user") User user, HttpServletRequest request) {
+        
+        ModelAndView modelAndView = new ModelAndView();
+        
+        double amount = Double.parseDouble(request.getParameter("amount"));
+        
+        String message = null;
+        
+        if(metroSystemService.updateBalance(user.getUserId(), amount) != null) {
+        
+            message = "Your Balance has now been increased by " + amount;
+            
+        } else {
+        
+            message = "Failed to top up your balance, please try again";
+        }
+        
+        user.setUserBalance(amount);
+        modelAndView.addObject("message", message);
+        modelAndView.setViewName("Output");
+        
+        return modelAndView;
+        
+    }
+
+    
+    //==========================================================================
     
 }
+
