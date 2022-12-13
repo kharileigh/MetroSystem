@@ -1,6 +1,7 @@
 package com.five.service;
 
 import com.five.entity.Station;
+import com.five.entity.StationList;
 import com.five.persistence.StationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,24 @@ public class StationServiceImpl implements StationService {
     private static final double ADJACENT_COST = 1.50;
 
 
+     @Override
+    public StationList getAllStations() {
+        
+        StationList stationList = new StationList();
+        
+        stationList.setStations(stationDao.findAll());
+        
+        return stationList;
+        
+    }
+    
+
+    @Override
+    public Station getStationByStationName(String stationName) {
+        
+        return stationDao.getStationByStationName(stationName);
+    }
+    
 
     @Override
     public double checkRoute(String sourceStation, String destinationStation) {
@@ -39,4 +58,6 @@ public class StationServiceImpl implements StationService {
         return price;
 
     }
+
+   
 }

@@ -6,6 +6,8 @@ package com.five.model.service;
 
 import com.five.entity.MetroSystem;
 import com.five.entity.MetroSystemList;
+import com.five.entity.Station;
+import com.five.entity.StationList;
 import com.five.entity.User;
 import com.five.model.persistence.CentralMetroSystemDao;
 import java.net.URI;
@@ -129,6 +131,24 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
         metroSystemList.setFares(metroDao.searchMetroSystemByUserId(userId));
         
         return metroSystemList;
+    }
+
+    
+    @Override
+    public StationList showAllStations() {
+        
+        StationList stations = restTemplate.getForObject("http://localhost:8082/stations", StationList.class);
+        
+        return stations;
+    }
+
+    
+    @Override
+    public Station getStationByStationName(String stationName) {
+        
+        Station station = restTemplate.getForObject("http://localhost:8082/stations/" + stationName, Station.class);
+        
+        return station;
     }
 
     

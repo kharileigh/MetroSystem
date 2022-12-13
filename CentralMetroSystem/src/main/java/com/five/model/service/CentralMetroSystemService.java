@@ -7,6 +7,8 @@ package com.five.model.service;
 
 import com.five.entity.MetroSystem;
 import com.five.entity.MetroSystemList;
+import com.five.entity.Station;
+import com.five.entity.StationList;
 import com.five.entity.User;
 
 
@@ -27,5 +29,9 @@ public interface CentralMetroSystemService {
     public MetroSystem saveTransaction(MetroSystem metroSystem, int userId);
     
     public MetroSystemList showTransactionHistory(int userId);
+    
+    public StationList showAllStations();
+    
+    public Station getStationByStationName(String stationName);
     
 }
