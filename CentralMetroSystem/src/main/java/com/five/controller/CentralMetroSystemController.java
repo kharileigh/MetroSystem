@@ -7,12 +7,13 @@ package com.five.controller;
 
 import com.five.entity.MetroSystem;
 import com.five.entity.Station;
+import com.five.entity.StationList;
 import com.five.entity.User;
 import com.five.model.service.CentralMetroSystemService;
 import java.time.LocalDateTime;
 import java.time.*;
-import java.util.ArrayList;
 import java.util.List;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,8 +31,8 @@ public class CentralMetroSystemController {
     @Autowired
     CentralMetroSystemService metroSystemService;
     
-    String start;
-    String stop;
+    //String start;
+    //String stop;
     
  
     
@@ -136,38 +137,31 @@ public class CentralMetroSystemController {
         return new ModelAndView("HomePage");
     }
     
-    // CHANGE TO STATIONS REST API
-    //------- LISTS ALL THE STATIONS
-    @ModelAttribute("stations")
-    public List <Station> getStation() {
-        List<Station> list = new ArrayList<Station>();
-        list.add(new Station(1, "Bank"));
-        list.add(new Station(2, "Lewisham"));
-        list.add(new Station(3, "Croydon"));
-        list.add(new Station(4, "Harlow"));
-        list.add(new Station(5, "Euston"));
-        
-        return list;
-        
-    }
-    
-    
     
     // NEED TO FIGURE OUT SETTING DATE & TIME & PRICE
     //==========================================================================
     //-------- SWIPES IN PAGE
     @RequestMapping("/swipesInPage")
     public ModelAndView swipepesInPageController() {
-    	return new ModelAndView("SwipesInPage");
+        
+        ModelAndView modelAndView = new ModelAndView();
+        
+        StationList stations = new StationList();
+        
+        stations = metroSystemService.showAllStations();
+        
+        List<Station> allStations = stations.getStations();
+        
+        modelAndView.addObject("allStations", allStations);
+        modelAndView.setViewName("SwipesInPage");
+        
+    	return modelAndView;
     }
     
     
     //--------- SWIPES IN METHOD
-    // get User starter balance -> set metrosystem
-    // get User source station - set ms
-    // get User date & time -> set ms
     @RequestMapping("/swipesIn")
-    public ModelAndView swipesInController(@RequestParam("stationName") String stationName, HttpServletRequest request, HttpSession session) {
+    public ModelAndView swipesInController(@RequestParam("stationName") String stationName,  HttpSession session) {
     	MetroSystem metroSystem =  new MetroSystem();
     	
     	ModelAndView modelAndView = new ModelAndView();
@@ -179,11 +173,11 @@ public class CentralMetroSystemController {
     	
     	String message = null;
     	
-    	if(metroSystemService.balanceCheck(user.getUserId()) != null) {
-    		if(user.getUserBalance() <= 6)
-                    message = "The amount" + user.getUserBalance() + " is less than required";
-    	} else 
-    		start = stationName;
+    	if(metroSystemService.balanceCheck(user.getUserId()).equals("Balance is below limit")) {	
+            message = "The amount" + user.getUserBalance() + " is less than required";
+            
+    	} else {
+    		String start = stationName;
     		
                 // set Metro System entity - Source Station
     		metroSystem.setSourceStation(start);
@@ -198,17 +192,19 @@ public class CentralMetroSystemController {
                 
                 // set Metro System entity - userId
                 metroSystem.setUserId(user.getUserId());
-                
-    	
-    		modelAndView.addObject("message", message);
-    		session.setAttribute("start", start);
-                session.setAttribute("metroSystem", metroSystem);
-                
-                // MIGHT NEED TO CHANGE VIEW TO SWIPE OUT PAGE
-    		modelAndView.setViewName("Output");
     		
-    		return modelAndView;
+        }
+        
+        modelAndView.addObject("message", message);
+        session.setAttribute("metroSystem", metroSystem);
+
+        // MIGHT NEED TO CHANGE VIEW TO SWIPE OUT PAGE
+        modelAndView.setViewName("Output");
+
+        return modelAndView;
     }
+    
+    
     
     // NEED TO FIGURE OUT SETTING DATE & TIME & PRICE - MUST REDIRECT TO USER TRANSACTION PAGE (breakdown of journey and cost)
     //==========================================================================
@@ -221,7 +217,7 @@ public class CentralMetroSystemController {
     //--------- SWIPES OUT METHOD
     // NEED TO MAP DATA OF TRANSACTION OBJECT TO PRINT USER TICKET VIEW
     @RequestMapping("/swipesOut")
-    public ModelAndView swipesOutController(@RequestParam("stationName") String stationName, HttpServletRequest request, HttpSession session) {
+    public ModelAndView swipesOutController(@RequestParam("stationName") String stationName, HttpSession session) {
     	
         // getting Metro System source data from session
         MetroSystem metroSystem = (MetroSystem)session.getAttribute("metroSystem");
@@ -234,9 +230,8 @@ public class CentralMetroSystemController {
         LocalDateTime localDateTime = LocalDateTime.now();
     	
     	String message = null;
-    	String stop = null;
     		
-        stop = stationName;
+        String stop = stationName;
 
         // set Metro System entity - Source Date & Time, Destination Station
         metroSystem.setDestinationStation(stop);
@@ -256,7 +251,6 @@ public class CentralMetroSystemController {
         modelAndView.addObject("message", message);
         modelAndView.addObject("transactions", transaction);
         session.setAttribute("user", user);
-        session.setAttribute("stop", stop);
         session.setAttribute("transactions", transaction);
         modelAndView.setViewName("PrintUserTicket");
         return modelAndView;

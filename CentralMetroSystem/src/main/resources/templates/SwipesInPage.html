@@ -47,7 +47,7 @@
             <tr>
                 <td>
                     <select>
-                        <option th:each="station : ${stations}" th:text="${station.stationName}" th:value="${station.stationName}"></option>
+                        <option th:each="station : ${allStations}" th:text="${station.stationName}" th:value="${station.stationName}" name="stationName"></option>
                     </select>
                 </td>
             </tr>
