@@ -21,7 +21,8 @@ public interface CentralMetroSystemService {
     public String balanceCheck(int userId);
     
     public User updateBalance(int userId, double amount);
-    
+
+    public User updateBalancePositiveOnly(int userId, double amount);
     // RETURNS PRICE OF ROUTE
     public double checkRoute(String sourceStation, String destinationStation);
     

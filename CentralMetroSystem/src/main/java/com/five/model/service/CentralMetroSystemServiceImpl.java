@@ -92,8 +92,22 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
         
         return user;
     }
+    @Override
+    public User updateBalancePositiveOnly(int userId, double amount) {
+        if (amount > 0) {
+            HttpHeaders headers = new HttpHeaders();
 
-    
+            HttpEntity<User> entity = new HttpEntity<User>(headers);
+
+            User user = restTemplate.exchange("http://localhost:8084/users/" + userId + "/" + amount, HttpMethod.PUT, entity, User.class).getBody();
+
+            return user;
+        } else {
+            return null;
+        }
+    }
+
+
     @Override
     public double checkRoute(String sourceStation, String destinationStation) {
         
@@ -109,6 +123,8 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
  
         // deducts price from User's current balance
         updateBalance(userId, -metroSystem.getPrice());
+
+        metroSystem.setRemainingBalance(metroSystem.getStarterBalance() - metroSystem.getPrice());
         
         // saves to database
         metroDao.save(metroSystem);
@@ -116,8 +132,7 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
         // gets single transaction 
         MetroSystem singleTransaction = metroDao.searchMetroSystemByUserIdAndDestinationSwipeOutDateTime(userId, metroSystem.getDestinationSwipeOutDateTime());
         
-        singleTransaction.setRemainingBalance(singleTransaction.getStarterBalance() - singleTransaction.getPrice());
-        
+
         return singleTransaction;
     }
 

@@ -5,10 +5,7 @@
 
 package com.five.controller;
 
-import com.five.entity.MetroSystem;
-import com.five.entity.Station;
-import com.five.entity.StationList;
-import com.five.entity.User;
+import com.five.entity.*;
 import com.five.model.service.CentralMetroSystemService;
 import java.time.LocalDateTime;
 import java.time.*;
@@ -41,8 +38,9 @@ public class CentralMetroSystemController {
     
     //----- LANDING PAGE
     @RequestMapping("/")
-    public ModelAndView getLandingPage() {
-    	return new ModelAndView("LandingPage");
+    public ModelAndView getLandingPage(HttpSession session) {
+    	session.invalidate();
+        return new ModelAndView("LandingPage");
     }
     
     
@@ -107,6 +105,8 @@ public class CentralMetroSystemController {
         newUser.setUserBalance(balance);
         
         metroSystemService.addNewUser(newUser.getUserName(), newUser.getUserPassword(), newUser.getUserBalance());
+
+        User user = metroSystemService.loginCheck(newUser.getUserName(), newUser.getUserPassword());
         
         String message;
         
@@ -115,7 +115,7 @@ public class CentralMetroSystemController {
             
             modelAndView.setViewName("HomePage");
             modelAndView.addObject("newUser", newUser);
-            session.setAttribute("newUser", newUser);
+            session.setAttribute("user", user);
         
         // falls to create new user
         } else {
@@ -170,7 +170,7 @@ public class CentralMetroSystemController {
         
         // get DateTime and format it to full localized format eg : Sunday, February 7, 2010
         LocalDateTime localDateTime = LocalDateTime.now();
-        String dateTime = localDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
+        String dateTime = localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
         
         // gets User from session
         User user = (User)session.getAttribute("user");
@@ -179,42 +179,48 @@ public class CentralMetroSystemController {
     	
     	if(metroSystemService.balanceCheck(user.getUserId()).equals("Balance is below limit")) {	
             message = "The amount" + user.getUserBalance() + " is less than required";
+
+            modelAndView.addObject("message", message);
+            modelAndView.setViewName("Output");
+            return modelAndView;
             
     	} else {
     		String start = stationName;
-    		
-                // set Metro System entity - Source Station
+
+            // set Metro System entity - Source Station
     		metroSystem.setSourceStation(start);
     	
     		message = "You have successfully swiped in at : " + start;
                 
-                // set Metro System entity - Starter Balance 
-                metroSystem.setStarterBalance(user.getUserBalance());
-                
-                // set Metro System entity - Source Date & Time
-                metroSystem.setSourceSwipeInDateTime(dateTime);
-                
-                // set Metro System entity - userId
-                metroSystem.setUserId(user.getUserId());
+            // set Metro System entity - Starter Balance
+            metroSystem.setStarterBalance(user.getUserBalance());
+
+            // set Metro System entity - Source Date & Time
+            metroSystem.setSourceSwipeInDateTime(dateTime);
+
+            // set Metro System entity - userId
+            metroSystem.setUserId(user.getUserId());
+
+            modelAndView.addObject("message", message);
+            modelAndView.addObject("metroSystem", metroSystem);
+            session.setAttribute("metroSystem", metroSystem);
+
+            // populating stations into dropdown menu
+            StationList stations = new StationList();
+
+            stations = metroSystemService.showAllStations();
+
+            List<Station> allStations = stations.getStations();
+
+            modelAndView.addObject("allStations", allStations);
+
+            modelAndView.setViewName("SwipesOutPage");
+
+            return modelAndView;
     		
         }
         
-        modelAndView.addObject("message", message);
-        modelAndView.addObject("metroSystem", metroSystem);
-        session.setAttribute("metroSystem", metroSystem);
-        
-        // populating stations into dropdown menu
-        StationList stations = new StationList();
-        
-        stations = metroSystemService.showAllStations();
-        
-        List<Station> allStations = stations.getStations();
-        
-        modelAndView.addObject("allStations", allStations);
 
-        modelAndView.setViewName("SwipesOutPage");
-
-        return modelAndView;
     }
     
     
@@ -243,7 +249,8 @@ public class CentralMetroSystemController {
         
         // get DateTime and format it to full localized format eg : Sunday, February 7, 2010
         LocalDateTime localDateTime = LocalDateTime.now();
-        String dateTime = localDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
+        System.out.println(localDateTime);
+        String dateTime = localDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
     	
     	String message = null;
     		
@@ -267,9 +274,9 @@ public class CentralMetroSystemController {
 
 
         modelAndView.addObject("message", message);
-        modelAndView.addObject("transactions", transaction);
+        modelAndView.addObject("transaction", transaction);
         session.setAttribute("user", user);
-        session.setAttribute("transactions", transaction);
+        session.setAttribute("transaction", transaction);
         modelAndView.setViewName("PrintUserTicket");
         return modelAndView;
     
@@ -295,7 +302,7 @@ public class CentralMetroSystemController {
         
         String message = null;
         
-        if(metroSystemService.updateBalance(user.getUserId(), amount) != null) {
+        if(metroSystemService.updateBalancePositiveOnly(user.getUserId(), amount) != null) {
         
             message = "Your Balance has now been increased by " + amount;
             
@@ -304,7 +311,7 @@ public class CentralMetroSystemController {
             message = "Failed to top up your balance, please try again";
         }
         
-        user.setUserBalance(amount);
+        user.setUserBalance(user.getUserBalance() + amount);
         session.setAttribute("user", user);
         modelAndView.addObject("message", message);
         modelAndView.setViewName("Output");
@@ -369,5 +376,19 @@ public class CentralMetroSystemController {
     
     //==========================================================================
     //-------  SHOW TRANSACTIONS BY USER ID
+    @RequestMapping("/showTransactionsPage")
+    public ModelAndView showUserTransactionsController(HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        // getting User from session
+        User user = (User)session.getAttribute("user");
+
+        List<MetroSystem> fares = metroSystemService.showTransactionHistory(user.getUserId()).getFares();
+        modelAndView.addObject("metroSystemLists", fares);
+        modelAndView.setViewName("ShowAllTransactions");
+
+        return modelAndView;
+
+    }
 }
 

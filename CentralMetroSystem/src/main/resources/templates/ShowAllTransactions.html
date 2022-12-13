@@ -54,21 +54,21 @@
         <!-- map transaction object to table  -->
         <tr th:each="metroSystemList : ${metroSystemLists}">
             
-            <td class="show" th:text="metroSystemList.userId">
-            <td class="show" th:text="metroSystemList.starterBalance">
-            <td class="show" th:text="metroSystemList.sourceStation">
-            <td class="show" th:text="metroSystemList.sourceSwipeInDateTime">
-            <td class="show" th:text="metroSystemList.remainingBalance">
-            <td class="show" th:text="metroSystemList.destinationStation">
-            <td class="show" th:text="metroSystemList.destinationSwipeOutDateTime">
-            <td class="show" th:text="metroSystemList.price">
+            <td class="show" th:text="${metroSystemList.userId}">
+            <td class="show" th:text="${metroSystemList.starterBalance}">
+            <td class="show" th:text="${metroSystemList.sourceStation}">
+            <td class="show" th:text="${metroSystemList.sourceSwipeInDateTime}">
+            <td class="show" th:text="${metroSystemList.remainingBalance}">
+            <td class="show" th:text="${metroSystemList.destinationStation}">
+            <td class="show" th:text="${metroSystemList.destinationSwipeOutDateTime}">
+            <td class="show" th:text="${metroSystemList.price}">
         </tr>
        
         
         <!-- return to home -->
         <tr>
             <td class="logout">
-                <a href="./landingPage"> Logout </a>
+                <a href="./"> Logout </a>
             </td>
         </tr>
 

@@ -51,22 +51,22 @@
         </tr>
 
         <!-- map transaction object to table  -->
-        <tr th:each="transaction : ${transactions}">
+        <tr>
             
-            <td class="show" th:text="transaction.starterBalance">
-            <td class="show" th:text="transaction.sourceStation">
-            <td class="show" th:text="transaction.sourceSwipeInDateTime">
-            <td class="show" th:text="transaction.remainingBalance">
-            <td class="show" th:text="transaction.destinationStation">
-            <td class="show" th:text="transaction.destinationSwipeOutDateTime">
-            <td class="show" th:text="transaction.price">
+            <td class="show" th:text="${transaction.starterBalance}">
+            <td class="show" th:text="${transaction.sourceStation}">
+            <td class="show" th:text="${transaction.sourceSwipeInDateTime}">
+            <td class="show" th:text="${transaction.remainingBalance}">
+            <td class="show" th:text="${transaction.destinationStation}">
+            <td class="show" th:text="${transaction.destinationSwipeOutDateTime}">
+            <td class="show" th:text="${transaction.price}">
         </tr>
        
         
         <!-- return to home -->
         <tr>
             <td class="logout">
-                <a href="./landingPage"> Logout </a>
+                <a href="./"> Logout </a>
             </td>
         </tr>
 

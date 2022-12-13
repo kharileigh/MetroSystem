@@ -41,3 +41,10 @@ VALUES(1, "Bank"),
 -- SHOW DATA:
 select * from User;
 select * from Station;
+
+-- DROP TABLE
+DROP TABLE User;
+DROP TABLE CentralMetroSystem;
+
+SELECT * FROM CentralMetroSystem;
+SHOW COLUMNS FROM CentralMetroSystem;
