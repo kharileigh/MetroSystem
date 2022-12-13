@@ -37,14 +37,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateBalance(int userId, double amount) {
+    public User updateBalance(int userId, double amount) {
         User user = userDao.getById(userId);
+        
         if (user != null) {
             user.setUserBalance(user.getUserBalance() + amount);
             userDao.save(user);
-            return true;
+            return user;
+            
         } else {
-            return false;
+            return null;
         }
     }
 

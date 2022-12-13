@@ -35,7 +35,7 @@ public class MetroSystem {
     private double price;
     private String sourceStation;
     private String destinationStation;
-    private LocalDateTime sourceSwipeInDateTime;
-    private LocalDateTime destinationSwipeOutDateTime;
+    private String sourceSwipeInDateTime;
+    private String destinationSwipeOutDateTime;
     
 }

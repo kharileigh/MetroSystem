@@ -29,8 +29,8 @@ public class StationResource {
     
 
     @GetMapping(path = "/stations/{sourceStation}/{destinationStation}", produces = MediaType.TEXT_PLAIN_VALUE)
-    public double checkRouteResource(@PathVariable("sourceStation") String sourceStation, @PathVariable("destinationStation") String destinationStation) {
-        return stationService.checkRoute(sourceStation,destinationStation);
+    public String checkRouteResource(@PathVariable("sourceStation") String sourceStation, @PathVariable("destinationStation") String destinationStation) {
+        return String.valueOf(stationService.checkRoute(sourceStation,destinationStation));
     }
 
 }

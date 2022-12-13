@@ -46,8 +46,8 @@
             <!-- user name input -->
             <tr>
                 <td>
-                    <select>
-                        <option th:each="station : ${allStations}" th:text="${station.stationName}" th:value="${station.stationName}" name="stationName"></option>
+                    <select name="stationName">
+                        <option th:each="station : ${allStations}" th:text="${station.stationName}" th:value="${station.stationName}" ></option>
                     </select>
                 </td>
             </tr>

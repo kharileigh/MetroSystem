@@ -12,6 +12,8 @@ import com.five.entity.User;
 import com.five.model.service.CentralMetroSystemService;
 import java.time.LocalDateTime;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 
 
@@ -166,7 +168,9 @@ public class CentralMetroSystemController {
     	
     	ModelAndView modelAndView = new ModelAndView();
         
+        // get DateTime and format it to full localized format eg : Sunday, February 7, 2010
         LocalDateTime localDateTime = LocalDateTime.now();
+        String dateTime = localDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
         
         // gets User from session
         User user = (User)session.getAttribute("user");
@@ -182,13 +186,13 @@ public class CentralMetroSystemController {
                 // set Metro System entity - Source Station
     		metroSystem.setSourceStation(start);
     	
-    		message = "You have successfully swiped in at" + start;
+    		message = "You have successfully swiped in at : " + start;
                 
                 // set Metro System entity - Starter Balance 
                 metroSystem.setStarterBalance(user.getUserBalance());
                 
                 // set Metro System entity - Source Date & Time
-                metroSystem.setSourceSwipeInDateTime(localDateTime);
+                metroSystem.setSourceSwipeInDateTime(dateTime);
                 
                 // set Metro System entity - userId
                 metroSystem.setUserId(user.getUserId());
@@ -196,10 +200,19 @@ public class CentralMetroSystemController {
         }
         
         modelAndView.addObject("message", message);
+        modelAndView.addObject("metroSystem", metroSystem);
         session.setAttribute("metroSystem", metroSystem);
+        
+        // populating stations into dropdown menu
+        StationList stations = new StationList();
+        
+        stations = metroSystemService.showAllStations();
+        
+        List<Station> allStations = stations.getStations();
+        
+        modelAndView.addObject("allStations", allStations);
 
-        // MIGHT NEED TO CHANGE VIEW TO SWIPE OUT PAGE
-        modelAndView.setViewName("Output");
+        modelAndView.setViewName("SwipesOutPage");
 
         return modelAndView;
     }
@@ -211,7 +224,8 @@ public class CentralMetroSystemController {
     //--------- SWIPES OUT PAGE
     @RequestMapping("/swipesOutPage")
     public ModelAndView swipepesOutPageController() {
-    	return new ModelAndView("swipesOutPage");
+        
+    	return new ModelAndView("SwipesOutPage");
     }
     
     //--------- SWIPES OUT METHOD
@@ -227,7 +241,9 @@ public class CentralMetroSystemController {
         
     	ModelAndView modelAndView = new ModelAndView();
         
+        // get DateTime and format it to full localized format eg : Sunday, February 7, 2010
         LocalDateTime localDateTime = LocalDateTime.now();
+        String dateTime = localDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
     	
     	String message = null;
     		
@@ -235,7 +251,9 @@ public class CentralMetroSystemController {
 
         // set Metro System entity - Source Date & Time, Destination Station
         metroSystem.setDestinationStation(stop);
-        metroSystem.setDestinationSwipeOutDateTime(localDateTime);
+        metroSystem.setDestinationSwipeOutDateTime(dateTime);
+        metroSystem.setSourceStation(metroSystem.getSourceStation());
+        
 
         // set Metro System entity - Price
         Double price = metroSystemService.checkRoute(metroSystem.getSourceStation(), stop);
@@ -245,7 +263,7 @@ public class CentralMetroSystemController {
         // calculates single transaction of User's journey
         MetroSystem transaction = metroSystemService.saveTransaction(metroSystem, user.getUserId());
 
-        message = "You have successfully swiped out at" + stop + " with current balance a " +  metroSystem.getRemainingBalance();
+        message = "You have successfully swiped out at " + stop + " with current balance :  " +  metroSystem.getRemainingBalance();
 
 
         modelAndView.addObject("message", message);
@@ -262,6 +280,7 @@ public class CentralMetroSystemController {
     // TOP UP BALANCE PAGE
     @RequestMapping("/topUpBalancePage")
     public ModelAndView topUpBalancePageController() {
+        
         return new ModelAndView("TopUpBalancePage");
     }
     
@@ -324,7 +343,23 @@ public class CentralMetroSystemController {
     
     //==========================================================================
     //------ PRINT USER TICKET
+    @RequestMapping("/printUserTicket")
+    public ModelAndView printUserTicketController(HttpSession session) {
     
+        ModelAndView modelAndView = new ModelAndView();
+        
+        // getting User from session
+        User user = (User)session.getAttribute("user");
+        
+        // getting Metro System transaction from session
+        MetroSystem transaction = (MetroSystem)session.getAttribute("transactions");
+        
+        modelAndView.addObject("transaction", transaction);
+        modelAndView.setViewName("PrintUserTicket");
+        
+        return modelAndView;
+        
+    }
     
     
     //==========================================================================

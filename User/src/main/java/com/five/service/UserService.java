@@ -9,7 +9,7 @@ public interface UserService {
 
     boolean balanceCheck(int userId);
     
-    boolean updateBalance(int userid, double amount);
+    User updateBalance(int userid, double amount);
 
     User createUser(User user);
 }

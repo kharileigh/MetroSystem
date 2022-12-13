@@ -19,6 +19,6 @@ public interface CentralMetroSystemDao extends JpaRepository<MetroSystem, Intege
     public List<MetroSystem> searchMetroSystemByUserId(int userId);
     
     
-    public MetroSystem searchMetroSystemByUserIdAndDestinationSwipeOutDateTime(int userId, LocalDateTime destinationSwipeOutDateTime);
+    public MetroSystem searchMetroSystemByUserIdAndDestinationSwipeOutDateTime(int userId, String destinationSwipeOutDateTime);
     
 }

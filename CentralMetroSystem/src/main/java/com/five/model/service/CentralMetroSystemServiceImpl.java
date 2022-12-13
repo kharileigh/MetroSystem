@@ -97,9 +97,9 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     @Override
     public double checkRoute(String sourceStation, String destinationStation) {
         
-        double route = restTemplate.getForObject("http://localhost:8082/stations/" + sourceStation + "/" + destinationStation, Double.class);
+        String route = restTemplate.getForObject("http://localhost:8082/stations/" + sourceStation + "/" + destinationStation, String.class);
         
-        return route;
+        return Double.parseDouble(route);
         
     }
     
