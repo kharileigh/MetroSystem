@@ -11,6 +11,7 @@ import com.five.model.persistence.CentralMetroSystemDao;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -36,39 +37,25 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     public User addNewUser(String userName, String userPassword, double userBalance) {
            
         User newUser = new User();
-        
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-                
-            URI url = new URI("http://localhost:8084/newUser");
-
-            
-            newUser.setUserName(userName);
-            newUser.setUserPassword(userPassword);
-            newUser.setUserBalance(userBalance);
-            HttpEntity<User> requestEntity = new HttpEntity<>(newUser, headers);
-
-            ResponseEntity<User> responseEntity = restTemplate.postForEntity(url, requestEntity, User.class);
+               
+        newUser.setUserName(userName);
+        newUser.setUserPassword(userPassword);
+        newUser.setUserBalance(userBalance);
 
 
-            // check user has been added
-            if(!("User not added").equals(responseEntity)) {
-                
-                return loginCheck(userName, userPassword);
-                
-            } else {
-                
-                return null;
-                
-                // user successfully added - immediately logs user in
-            }
-            
-        } catch (URISyntaxException ex) {
-        
+        String message = restTemplate.postForObject("http://localhost:8084/newUser", newUser, String.class);
+
+
+        // check user has been added
+        if(!("User not added").equals(message)) {
+
+            return loginCheck(userName, userPassword);
+
+        } else {
+
+            return null;
         }
-        
-        return newUser;
+       
     }
     
 
@@ -95,7 +82,11 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     @Override
     public User updateBalance(int userId, double amount) {
         
-        User user = restTemplate.getForObject("http://localhost:8084/users/" + userId + "/" + amount, User.class);
+        HttpHeaders headers = new HttpHeaders();
+        
+        HttpEntity<User> entity = new HttpEntity<User>(headers);
+        
+        User user = restTemplate.exchange("http://localhost:8084/users/" + userId + "/" + amount, HttpMethod.PUT, entity, User.class).getBody();
         
         return user;
     }
@@ -112,24 +103,20 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     
 
     @Override
-    public MetroSystem calculateTravelCost(int userId, double starterBalance, double remainingBalance, double price, String sourceStation, String destinationStation, LocalDate sourceSwipeInDateAndTime, LocalDate destinationSwipeOutDateAndTime) {
+    public MetroSystem saveTransaction(MetroSystem metroSystem, int userId) {
+ 
+        // deducts price from User's current balance
+        updateBalance(userId, -metroSystem.getPrice());
         
-        
-        MetroSystem metroSystem = new MetroSystem();
-        
-        metroSystem.setUserId(userId);
-        metroSystem.setStarterBalance(starterBalance);
-        metroSystem.setRemainingBalance(remainingBalance);
-        metroSystem.setPrice(price);
-        metroSystem.setSourceStation(sourceStation);
-        metroSystem.setDestinationStation(destinationStation);
-        metroSystem.setSourceSwipeInDateAndTime(sourceSwipeInDateAndTime);
-        metroSystem.setDestinationSwipeOutDateAndTime(destinationSwipeOutDateAndTime);
-        
-        // SAVES TO DATABASE
+        // saves to database
         metroDao.save(metroSystem);
         
-        return metroSystem;
+        // gets single transaction 
+        MetroSystem singleTransaction = metroDao.searchMetroSystemByUserIdAndDestinationSwipeOutDateTime(userId, metroSystem.getDestinationSwipeOutDateTime());
+        
+        singleTransaction.setRemainingBalance(singleTransaction.getStarterBalance() - singleTransaction.getPrice());
+        
+        return singleTransaction;
     }
 
     

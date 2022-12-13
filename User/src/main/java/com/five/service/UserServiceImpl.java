@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
        
-        if(userDao.getUserByUserNameAndUserPassword(user.getUserName(), user.getUserPassword()) != null) {
+        if(userDao.getUserByUserNameAndUserPassword(user.getUserName(), user.getUserPassword()) == null) {
             
             userDao.save(user);
             return user;

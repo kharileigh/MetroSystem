@@ -9,6 +9,10 @@ import com.five.entity.MetroSystem;
 import com.five.entity.Station;
 import com.five.entity.User;
 import com.five.model.service.CentralMetroSystemService;
+import java.time.LocalDateTime;
+import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,6 +32,8 @@ public class CentralMetroSystemController {
     
     String start;
     String stop;
+    
+ 
     
     
     //----- LANDING PAGE
@@ -130,6 +136,23 @@ public class CentralMetroSystemController {
         return new ModelAndView("HomePage");
     }
     
+    // CHANGE TO STATIONS REST API
+    //------- LISTS ALL THE STATIONS
+    @ModelAttribute("stations")
+    public List <Station> getStation() {
+        List<Station> list = new ArrayList<Station>();
+        list.add(new Station(1, "Bank"));
+        list.add(new Station(2, "Lewisham"));
+        list.add(new Station(3, "Croydon"));
+        list.add(new Station(4, "Harlow"));
+        list.add(new Station(5, "Euston"));
+        
+        return list;
+        
+    }
+    
+    
+    
     // NEED TO FIGURE OUT SETTING DATE & TIME & PRICE
     //==========================================================================
     //-------- SWIPES IN PAGE
@@ -140,30 +163,48 @@ public class CentralMetroSystemController {
     
     
     //--------- SWIPES IN METHOD
+    // get User starter balance -> set metrosystem
+    // get User source station - set ms
+    // get User date & time -> set ms
     @RequestMapping("/swipesIn")
-    public ModelAndView swipesInController(@ModelAttribute("user") User user, @ModelAttribute("station") Station station, HttpServletRequest request, HttpSession session) {
+    public ModelAndView swipesInController(@RequestParam("stationName") String stationName, HttpServletRequest request, HttpSession session) {
     	MetroSystem metroSystem =  new MetroSystem();
     	
     	ModelAndView modelAndView = new ModelAndView();
+        
+        LocalDateTime localDateTime = LocalDateTime.now();
+        
+        // gets User from session
+        User user = (User)session.getAttribute("user");
     	
     	String message = null;
     	
     	if(metroSystemService.balanceCheck(user.getUserId()) != null) {
     		if(user.getUserBalance() <= 6)
-                    message = "The amount" +user.getUserBalance() + " is less than required";
+                    message = "The amount" + user.getUserBalance() + " is less than required";
     	} else 
-    		start = station.getStationName();
+    		start = stationName;
     		
-                // set 
+                // set Metro System entity - Source Station
     		metroSystem.setSourceStation(start);
-                metroSystem.setStarterBalance(user.getUserBalance());
-    	
-    		request.getParameter("stationName");
     	
     		message = "You have successfully swiped in at" + start;
+                
+                // set Metro System entity - Starter Balance 
+                metroSystem.setStarterBalance(user.getUserBalance());
+                
+                // set Metro System entity - Source Date & Time
+                metroSystem.setSourceSwipeInDateTime(localDateTime);
+                
+                // set Metro System entity - userId
+                metroSystem.setUserId(user.getUserId());
+                
     	
     		modelAndView.addObject("message", message);
     		session.setAttribute("start", start);
+                session.setAttribute("metroSystem", metroSystem);
+                
+                // MIGHT NEED TO CHANGE VIEW TO SWIPE OUT PAGE
     		modelAndView.setViewName("Output");
     		
     		return modelAndView;
@@ -178,38 +219,47 @@ public class CentralMetroSystemController {
     }
     
     //--------- SWIPES OUT METHOD
+    // NEED TO MAP DATA OF TRANSACTION OBJECT TO PRINT USER TICKET VIEW
     @RequestMapping("/swipesOut")
-    public ModelAndView swipesOutController(@ModelAttribute("user") User user, @ModelAttribute("station") Station station, HttpServletRequest request, HttpSession session) {
+    public ModelAndView swipesOutController(@RequestParam("stationName") String stationName, HttpServletRequest request, HttpSession session) {
     	
-        MetroSystem metroSystem = new MetroSystem();
+        // getting Metro System source data from session
+        MetroSystem metroSystem = (MetroSystem)session.getAttribute("metroSystem");
+        
+        // getting User from session
+        User user = (User)session.getAttribute("user");
         
     	ModelAndView modelAndView = new ModelAndView();
+        
+        LocalDateTime localDateTime = LocalDateTime.now();
     	
     	String message = null;
     	String stop = null;
-    	
-        // SUCCESSFULLY SWIPES OUT USER
-    	if(metroSystemService.balanceCheck(user.getUserId()) != null) {
     		
-    		stop = station.getStationName();
-                
-                metroSystem.setDestinationStation(stop);
-    	
-    		metroSystemService.checkRoute(start, stop);
-                metroSystem.setRemainingBalance(user.getUserBalance());
-    	
-                message = "You have successfully swiped out at" + stop + " with current balance a " +  metroSystem.getRemainingBalance();
-    	
-        // FAILS TO SWIPE OUT USER	
-    	} else {        
-            
-            message = "The amount" + user.getUserBalance() + " is less than required. Please top up";
-        }
-    	
-            modelAndView.addObject("message", message);
-            session.setAttribute("stop", stop);
-            modelAndView.setViewName("Output");
-            return modelAndView;
+        stop = stationName;
+
+        // set Metro System entity - Source Date & Time, Destination Station
+        metroSystem.setDestinationStation(stop);
+        metroSystem.setDestinationSwipeOutDateTime(localDateTime);
+
+        // set Metro System entity - Price
+        Double price = metroSystemService.checkRoute(metroSystem.getSourceStation(), stop);
+        
+        metroSystem.setPrice(price);
+
+        // calculates single transaction of User's journey
+        MetroSystem transaction = metroSystemService.saveTransaction(metroSystem, user.getUserId());
+
+        message = "You have successfully swiped out at" + stop + " with current balance a " +  metroSystem.getRemainingBalance();
+
+
+        modelAndView.addObject("message", message);
+        modelAndView.addObject("transactions", transaction);
+        session.setAttribute("user", user);
+        session.setAttribute("stop", stop);
+        session.setAttribute("transactions", transaction);
+        modelAndView.setViewName("PrintUserTicket");
+        return modelAndView;
     
     }   
 
@@ -223,11 +273,12 @@ public class CentralMetroSystemController {
     
     // TOP UP BALANCE METHOD
     @RequestMapping("/topUpBalance")
-    public ModelAndView topUpBalanceController(@ModelAttribute("user") User user, HttpServletRequest request) {
+    public ModelAndView topUpBalanceController(@RequestParam("amount") double amount, HttpServletRequest request, HttpSession session) {
         
         ModelAndView modelAndView = new ModelAndView();
         
-        double amount = Double.parseDouble(request.getParameter("amount"));
+        // getting User from session
+        User user = (User)session.getAttribute("user");
         
         String message = null;
         
@@ -241,6 +292,7 @@ public class CentralMetroSystemController {
         }
         
         user.setUserBalance(amount);
+        session.setAttribute("user", user);
         modelAndView.addObject("message", message);
         modelAndView.setViewName("Output");
         
@@ -248,6 +300,7 @@ public class CentralMetroSystemController {
         
     }
 
+    
     //==========================================================================
     //------- SHOW CURRENT BALANCE
     @RequestMapping("/showCurrentBalancePage")
@@ -255,6 +308,24 @@ public class CentralMetroSystemController {
     
         return new ModelAndView("ShowCurrentBalance");
     }
+    
+    //------- SHOW CURRENT BALANCE
+    @RequestMapping("/showCurrentBalance")
+    public ModelAndView showCurrentBalanceController(HttpSession session) {
+    
+        ModelAndView modelAndView = new ModelAndView();
+        
+        // getting User from session
+        User user = (User)session.getAttribute("user");
+        
+        user.getUserBalance();
+        
+        modelAndView.addObject("user", user);
+        modelAndView.setViewName("ShowCurrentBalance");
+        
+        return modelAndView;
+    }
+    
     
     
     //==========================================================================
@@ -268,6 +339,6 @@ public class CentralMetroSystemController {
     
     
     //==========================================================================
-    //-------  SHOW TRANSACTIONS BY DATE
+    //-------  SHOW TRANSACTIONS BY USER ID
 }
 

@@ -6,6 +6,7 @@
 package com.five.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,7 +35,7 @@ public class MetroSystem {
     private double price;
     private String sourceStation;
     private String destinationStation;
-    private LocalDate sourceSwipeInDateAndTime;
-    private LocalDate destinationSwipeOutDateAndTime;
+    private LocalDateTime sourceSwipeInDateTime;
+    private LocalDateTime destinationSwipeOutDateTime;
     
 }

@@ -8,8 +8,6 @@ package com.five.model.service;
 import com.five.entity.MetroSystem;
 import com.five.entity.MetroSystemList;
 import com.five.entity.User;
-import java.time.LocalDate;
-import java.util.Date;
 
 
 public interface CentralMetroSystemService {
@@ -25,7 +23,8 @@ public interface CentralMetroSystemService {
     // RETURNS PRICE OF ROUTE
     public double checkRoute(String sourceStation, String destinationStation);
     
-    public MetroSystem calculateTravelCost(int userId, double starterBalance, double remainingBalance, double price, String sourceStation, String destinationStation, LocalDate sourceSwipeInDateAndTime, LocalDate destinationSwipeOutDateAndTime);
+    // SAVES FULL OBJECT TO DATABASE
+    public MetroSystem saveTransaction(MetroSystem metroSystem, int userId);
     
     public MetroSystemList showTransactionHistory(int userId);
     
