@@ -277,6 +277,26 @@ select, .show-balance {
     
 }
 
+.balance-container {
+    align-items: center;
+    border-radius: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    position: relative;
+    
+    background-color: black;
+    opacity: 0.80;
+    width: 500px;
+    height: 70%;
+    margin: 350px auto;
+        
+     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    -moz-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
+    -webkit-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18); 
+}
+
 .display-username {
     font-size: 40px;
     font-weight: 300;

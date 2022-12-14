@@ -25,14 +25,16 @@
 <br></br>
 
 <!-- MAIN CONTENT -->
-<div class="display-container">
+<div class="balance-container">
     
     <!-- table showing balance -->    
     <table>
 
         <!-- title of form -->
         <tr>
-            <h3 class="display-username"> Current Balance : </h3>
+            <td>
+                <h3 class="header" th:text="' Current Balance :  ' + ${session.user.userName}"></h3>
+            </td>
         </tr>
 
         <!-- display balance -->
