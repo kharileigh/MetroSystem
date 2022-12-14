@@ -7,6 +7,8 @@ package com.five.controller;
 
 import com.five.entity.*;
 import com.five.model.service.CentralMetroSystemService;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -101,7 +103,7 @@ public class CentralMetroSystemController {
         newUser.setUserName(userName);
         newUser.setUserPassword(userPassword);
         
-        Double balance = Double.parseDouble(userBalance);
+        BigDecimal balance = new BigDecimal(userBalance);
         newUser.setUserBalance(balance);
         
         metroSystemService.addNewUser(newUser.getUserName(), newUser.getUserPassword(), newUser.getUserBalance());
@@ -144,7 +146,7 @@ public class CentralMetroSystemController {
     //==========================================================================
     //-------- SWIPES IN PAGE
     @RequestMapping("/swipesInPage")
-    public ModelAndView swipepesInPageController() {
+    public ModelAndView swipesInPageController() {
         
         ModelAndView modelAndView = new ModelAndView();
         
@@ -263,7 +265,7 @@ public class CentralMetroSystemController {
         
 
         // set Metro System entity - Price
-        Double price = metroSystemService.checkRoute(metroSystem.getSourceStation(), stop);
+        BigDecimal price = metroSystemService.checkRoute(metroSystem.getSourceStation(), stop);
         
         metroSystem.setPrice(price);
 
@@ -293,7 +295,7 @@ public class CentralMetroSystemController {
     
     // TOP UP BALANCE METHOD
     @RequestMapping("/topUpBalance")
-    public ModelAndView topUpBalanceController(@RequestParam("amount") double amount, HttpServletRequest request, HttpSession session) {
+    public ModelAndView topUpBalanceController(@RequestParam("amount") BigDecimal amount, HttpServletRequest request, HttpSession session) {
         
         ModelAndView modelAndView = new ModelAndView();
         
@@ -311,7 +313,7 @@ public class CentralMetroSystemController {
             message = "Failed to top up your balance, please try again";
         }
         
-        user.setUserBalance(user.getUserBalance() + amount);
+        user.setUserBalance(user.getUserBalance().add(amount));
         session.setAttribute("user", user);
         modelAndView.addObject("message", message);
         modelAndView.setViewName("Output");

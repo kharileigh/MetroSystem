@@ -10,5 +10,5 @@ public interface StationService {
     
     public Station getStationByStationName(String stationName);
 
-    double checkRoute(String sourceStation, String destinationStation);
+    BigDecimal checkRoute(String sourceStation, String destinationStation);
 }

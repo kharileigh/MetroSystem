@@ -5,6 +5,7 @@
 
 package com.five.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,9 +33,12 @@ public class MetroSystem {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int fareId;
     private int userId;
-    private double starterBalance;
-    private double remainingBalance;
-    private double price;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private BigDecimal starterBalance;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private BigDecimal remainingBalance;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private BigDecimal price;
     private String sourceStation;
     private String destinationStation;
     private String sourceSwipeInDateTime;

@@ -11,20 +11,22 @@ import com.five.entity.Station;
 import com.five.entity.StationList;
 import com.five.entity.User;
 
+import java.math.BigDecimal;
+
 
 public interface CentralMetroSystemService {
     
     public User loginCheck(String userName, String userPassword);
     
-    public User addNewUser(String userName, String userPassword, double userBalance);
+    public User addNewUser(String userName, String userPassword, BigDecimal userBalance);
     
     public String balanceCheck(int userId);
     
-    public User updateBalance(int userId, double amount);
+    public User updateBalance(int userId, BigDecimal amount);
 
-    public User updateBalancePositiveOnly(int userId, double amount);
+    public User updateBalancePositiveOnly(int userId, BigDecimal amount);
     // RETURNS PRICE OF ROUTE
-    public double checkRoute(String sourceStation, String destinationStation);
+    public BigDecimal checkRoute(String sourceStation, String destinationStation);
     
     // SAVES FULL OBJECT TO DATABASE
     public MetroSystem saveTransaction(MetroSystem metroSystem, int userId);

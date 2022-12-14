@@ -3,8 +3,11 @@ package com.five.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 
 @Data
@@ -16,7 +19,8 @@ public class User {
 	private int userId;
 	private String userName;
 	private String userPassword;
-	private double userBalance;
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
+	private BigDecimal userBalance;
         
         // default constructor
         public User() {
@@ -24,7 +28,7 @@ public class User {
         }
 
 	//constructor without userId so that the database can auto-increment
-	public User(String userName, String userPassword, double userBalance) {
+	public User(String userName, String userPassword, BigDecimal userBalance) {
 		this.userName = userName;
 		this.userPassword = userPassword;
 		this.userBalance = userBalance;

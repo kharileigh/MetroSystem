@@ -10,6 +10,8 @@ import com.five.entity.Station;
 import com.five.entity.StationList;
 import com.five.entity.User;
 import com.five.model.persistence.CentralMetroSystemDao;
+
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -36,7 +38,7 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     
     
     @Override
-    public User addNewUser(String userName, String userPassword, double userBalance) {
+    public User addNewUser(String userName, String userPassword, BigDecimal userBalance) {
            
         User newUser = new User();
                
@@ -82,7 +84,7 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     
 
     @Override
-    public User updateBalance(int userId, double amount) {
+    public User updateBalance(int userId, BigDecimal amount) {
         
         HttpHeaders headers = new HttpHeaders();
         
@@ -93,8 +95,8 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
         return user;
     }
     @Override
-    public User updateBalancePositiveOnly(int userId, double amount) {
-        if (amount > 0) {
+    public User updateBalancePositiveOnly(int userId, BigDecimal amount) {
+        if (amount.compareTo(new BigDecimal("0.00")) > 0) {
             HttpHeaders headers = new HttpHeaders();
 
             HttpEntity<User> entity = new HttpEntity<User>(headers);
@@ -109,11 +111,11 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
 
 
     @Override
-    public double checkRoute(String sourceStation, String destinationStation) {
+    public BigDecimal checkRoute(String sourceStation, String destinationStation) {
         
         String route = restTemplate.getForObject("http://localhost:8082/stations/" + sourceStation + "/" + destinationStation, String.class);
         
-        return Double.parseDouble(route);
+        return new BigDecimal(route);
         
     }
     
@@ -122,9 +124,9 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
     public MetroSystem saveTransaction(MetroSystem metroSystem, int userId) {
  
         // deducts price from User's current balance
-        updateBalance(userId, -metroSystem.getPrice());
+        updateBalance(userId, metroSystem.getPrice().negate());
 
-        metroSystem.setRemainingBalance(metroSystem.getStarterBalance() - metroSystem.getPrice());
+        metroSystem.setRemainingBalance(metroSystem.getStarterBalance().subtract(metroSystem.getPrice()));
         
         // saves to database
         metroDao.save(metroSystem);

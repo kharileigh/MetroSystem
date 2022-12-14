@@ -2,6 +2,8 @@ package com.five.service;
 
 import com.five.entity.User;
 
+import java.math.BigDecimal;
+
 
 public interface UserService {
 
@@ -9,7 +11,7 @@ public interface UserService {
 
     boolean balanceCheck(int userId);
     
-    User updateBalance(int userid, double amount);
+    User updateBalance(int userid, BigDecimal amount);
 
     User createUser(User user);
 }

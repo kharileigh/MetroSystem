@@ -6,13 +6,15 @@ import com.five.persistence.StationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class StationServiceImpl implements StationService {
 
     @Autowired
     private StationDao stationDao;
 
-    private static final double ADJACENT_COST = 1.50;
+    private static final BigDecimal ADJACENT_COST = new BigDecimal("1.50");
 
 
      @Override
@@ -35,23 +37,23 @@ public class StationServiceImpl implements StationService {
     
 
     @Override
-    public double checkRoute(String sourceStation, String destinationStation) {
+    public BigDecimal checkRoute(String sourceStation, String destinationStation) {
         Station sourceStationObject = stationDao.getStationByStationName(sourceStation);
         Station destinationStationObject = stationDao.getStationByStationName(destinationStation);
-        int source = sourceStationObject.getStationId();
-        int destination = destinationStationObject.getStationId();
+        BigDecimal source = new BigDecimal(String.valueOf(sourceStationObject.getStationId()));
+        BigDecimal destination = new BigDecimal(String.valueOf(destinationStationObject.getStationId()));
 
-        int distance;
+        BigDecimal distance;
 
         if (source == destination)
-            return 0;
-        else if (source > destination) {
-            distance = source - destination;
+            return new BigDecimal("0.00");
+        else if (source.compareTo(destination) > 0) {
+            distance = source.subtract(destination);
         } else {
-            distance = destination - source;
+            distance = destination.subtract(source);
         }
 
-        double price = ADJACENT_COST * distance;
+        BigDecimal price = ADJACENT_COST.multiply(distance);
 
         return price;
 
