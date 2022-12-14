@@ -290,11 +290,42 @@ select, .show-balance {
     opacity: 0.80;
     width: 500px;
     height: 70%;
-    margin: 350px auto;
+    margin: 120px auto;
         
      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     -moz-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
     -webkit-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18); 
+}
+
+.balance-header {
+   background-color: black;
+   color: #fcb900; 
+   height: 40px;
+   opacity: 0.90;
+   
+   font-family: monospace;
+   font-size: 28px;
+   font-weight: 200;
+   text-align: center;
+   
+   padding : 15px;
+   
+}
+
+.balance-show {
+    background-color: white;
+    border-radius: 20px;
+    box-sizing: border-box;
+    color: black;
+    height: 40px;
+    opacity: 0.90;
+    
+    font-family: monospace;
+    font-size: 25px;
+    font-weight: 300;
+    text-align: center;
+    
+    padding: 5px;
 }
 
 .display-username {
@@ -325,11 +356,11 @@ select, .show-balance {
     opacity: 0.90;
     
     font-family: monospace;
-    font-size: 20px;
-    font-weight: 250;
+    font-size: 25px;
+    font-weight: 300;
     text-align: center;
     
-    display : revert;
+    padding: 5px;
 }
 
 .display-button-container {
