@@ -216,7 +216,7 @@ h3 {
 
 
 /*-------------- LOGIN, NEW USER, TOP UP BALANCE PAGE --------------*/
-.login-main-container, .newuser-main-container, .topup-balance-container {
+.login-main-container, .newuser-main-container, .topup-balance-container, .swipes-main-container{
     align-items: center;
     border-radius: 20px;
     box-sizing: border-box;
@@ -237,9 +237,7 @@ h3 {
         
 }
 
-
-/*-------------- ALL PAGES TAKING USER INPUT --------------*/
-.main-container {
+.output-container {
     align-items: center;
     border-radius: 20px;
     box-sizing: border-box;
@@ -251,12 +249,20 @@ h3 {
     background-color: black;
     opacity: 0.80;
     width: 500px;
-    height: 550px;
-    margin: 30px auto;
-        
-     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    height: 350px;
+    margin: -10px auto;
+    
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     -moz-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
     -webkit-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
+}
+
+.output-header {
+    align-self: center;
+    align-items: center;
+    
+    padding : 15px;
+    margin-bottom: 60px;
 }
 
 .input-table {
