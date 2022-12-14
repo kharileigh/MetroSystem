@@ -18,7 +18,7 @@ nav {
     display : flex;
     justify-content: center;
     position: fixed;
-    padding: 150%;
+    padding: 90%;
     
 }
 
@@ -54,7 +54,7 @@ h3 {
 }
 
 
-/* ---------------- HOMEPAGE --------------- */
+/* ---------------- REDIRECT-BUTTON --------------- */
 .button-container {
   display: flex;
   align-items: center;
@@ -178,7 +178,48 @@ h3 {
 }
 
 
-/*-------------- NEW USER --------------*/
+/*-------------- LANDING PAGE --------------*/
+.landing-main-container {
+    align-items: center;
+    border-radius: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    position: relative;
+    
+    background-color: black;
+    opacity: 0.80;
+    width: 500px;
+    height: 250px;
+    margin: 40px auto;
+        
+}
+
+/*-------------- LOGIN & NEW USER PAGE --------------*/
+.login-main-container, .newuser-main-container {
+    align-items: center;
+    border-radius: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    position: relative;
+    
+    background-color: black;
+    opacity: 0.80;
+    width: 500px;
+    height: 450px;
+    margin: -10px auto;
+    
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    -moz-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
+    -webkit-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
+        
+}
+
+
+/*-------------- ALL PAGES TAKING USER INPUT --------------*/
 .main-container {
     align-items: center;
     border-radius: 20px;
