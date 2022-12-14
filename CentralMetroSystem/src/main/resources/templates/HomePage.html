@@ -19,74 +19,79 @@
 <nav class="navbar">
     <div class="container-fluid">
         <div class="button-container">
-        <a class="navbar-image" href="#">
-            <img alt="MetroLogo" th:src="@{/images/metro.gif}">
-        </a>
+            <a class="navbar-image" href="#">
+                <img alt="MetroLogo" th:src="@{/images/metro.gif}">
+            </a>
         </div>
+        
+        <h1 th:text="'Welcome to the Central Metro System ' + ${session.user.userName} + '!'"> </h1>
     </div>
 </nav>
   
 <br></br>
     
-<!-- NEED TO HIDE LINK -->
-<div class="button-container">
+<!-- MAIN CONTENT -->
+<div class="homepage-main-container">
     
-    <button type="button" class="redirect-button">
-        <a href="./swipesInPage" >
-            <span class="text"> SWIPE IN </span>
-        </a>
-    </button>
+    <div class="button-container">
+
+        <button type="button" class="redirect-button">
+            <a href="./swipesInPage" >
+                <span class="text"> SWIPE IN </span>
+            </a>
+        </button>
+
+    </div>
+
+    <br></br>
+
+    <div class="button-container">
+
+        <button type="button" class="redirect-button">
+            <a href="./showCurrentBalancePage">
+                <span class="text"> VIEW BALANCE </span>
+            </a>
+        </button>
+
+    </div>
+
+    <br></br>
+
+    <div class="button-container">
+
+        <button type="button" class="redirect-button">
+            <a href="./topUpBalancePage">
+                <span class="text"> TOP UP </span>
+            </a>
+        </button>
+
+    </div>
+
+    <br></br>
+
+    <div class="button-container">
+
+        <button type="button" class="redirect-button">
+            <a href="./showTransactionsPage">
+                <span class="text"> SHOW TRANSACTIONS </span>
+            </a>
+        </button>
+
+    </div>
+
+    <br></br>
+
+    <div class="button-container">
+        <!-- SEND USER TO LANDING PAGE : must remove them from session -->
+        <button type="button" class="redirect-button">
+            <a href="./">
+                <span class="text"> LOG OUT </span>
+            </a>
+        </button>
+
+    </div>
     
 </div>
-
-<br></br>
-
-<div class="button-container">
-    
-    <button type="button" class="redirect-button">
-        <a href="./showCurrentBalancePage">
-            <span class="text"> VIEW BALANCE </span>
-        </a>
-    </button>
-    
-</div>
-
-<br></br>
-
-<div class="button-container">
-    
-    <button type="button" class="redirect-button">
-        <a href="./topUpBalancePage">
-            <span class="text"> TOP UP </span>
-        </a>
-    </button>
-    
-</div>
-
-<br></br>
-
-<div class="button-container">
-    
-    <button type="button" class="redirect-button">
-        <a href="./showTransactionsPage">
-            <span class="text"> SHOW TRANSACTIONS </span>
-        </a>
-    </button>
-    
-</div>
-
-<br></br>
-
-<div class="button-container">
-    <!-- SEND USER TO LANDING PAGE : must remove them from session -->
-    <button type="button" class="redirect-button">
-        <a href="./">
-            <span class="text"> LOG OUT </span>
-        </a>
-    </button>
-    
-</div>
-
     
 </body>
 </html>
