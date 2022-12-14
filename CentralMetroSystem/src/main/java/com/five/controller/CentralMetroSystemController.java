@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -102,30 +103,43 @@ public class CentralMetroSystemController {
         
         newUser.setUserName(userName);
         newUser.setUserPassword(userPassword);
-        
-        BigDecimal balance = new BigDecimal(userBalance);
-        newUser.setUserBalance(balance);
-        
-        metroSystemService.addNewUser(newUser.getUserName(), newUser.getUserPassword(), newUser.getUserBalance());
-
-        User user = metroSystemService.loginCheck(newUser.getUserName(), newUser.getUserPassword());
-        
         String message;
-        
-        // successfully added a new user
-        if(newUser != null) {
-            
-            modelAndView.setViewName("HomePage");
-            modelAndView.addObject("newUser", newUser);
-            session.setAttribute("user", user);
-        
-        // falls to create new user
-        } else {
-        
+
+        try {
+            BigDecimal balance = new BigDecimal(userBalance);
+            newUser.setUserBalance(balance);
+
+            if (newUser.getUserBalance().compareTo(new BigDecimal("0")) >= 0) {
+
+                metroSystemService.addNewUser(newUser.getUserName(), newUser.getUserPassword(), newUser.getUserBalance());
+
+                User user = metroSystemService.loginCheck(newUser.getUserName(), newUser.getUserPassword());
+
+
+                // successfully added a new user
+                if (newUser != null) {
+
+                    modelAndView.setViewName("HomePage");
+                    modelAndView.addObject("newUser", newUser);
+                    session.setAttribute("user", user);
+
+                    // falls to create new user
+                } else {
+
+                    message = "Failed to Create New User, please try new details";
+                    modelAndView.addObject("message", message);
+                    modelAndView.setViewName("NewUser");
+
+                }
+            } else {
+                message = "Failed to Create New User, please try new details";
+                modelAndView.addObject("message", message);
+                modelAndView.setViewName("NewUser");
+            }
+        } catch (NumberFormatException e) {
             message = "Failed to Create New User, please try new details";
             modelAndView.addObject("message", message);
             modelAndView.setViewName("NewUser");
-        
         }
         
     
@@ -295,7 +309,7 @@ public class CentralMetroSystemController {
     
     // TOP UP BALANCE METHOD
     @RequestMapping("/topUpBalance")
-    public ModelAndView topUpBalanceController(@RequestParam("amount") BigDecimal amount, HttpServletRequest request, HttpSession session) {
+    public ModelAndView topUpBalanceController(@RequestParam("amount") String stringAmount, HttpServletRequest request, HttpSession session) {
         
         ModelAndView modelAndView = new ModelAndView();
         
@@ -303,21 +317,29 @@ public class CentralMetroSystemController {
         User user = (User)session.getAttribute("user");
         
         String message = null;
-        
-        if(metroSystemService.updateBalancePositiveOnly(user.getUserId(), amount) != null) {
-        
-            message = "Your Balance has now been increased by £" + amount;
-            
-        } else {
-        
+
+        try {
+            BigDecimal amount = new BigDecimal(stringAmount);
+            if(metroSystemService.updateBalancePositiveOnly(user.getUserId(), amount) != null) {
+
+                message = "Your Balance has now been increased by £" + amount;
+                user.setUserBalance(user.getUserBalance().add(amount));
+                session.setAttribute("user", user);
+
+            } else {
+
+                message = "Failed to top up your balance, please try again";
+            }
+
+        } catch (NumberFormatException e) {
+
             message = "Failed to top up your balance, please try again";
+
         }
-        
-        user.setUserBalance(user.getUserBalance().add(amount));
-        session.setAttribute("user", user);
+
         modelAndView.addObject("message", message);
         modelAndView.setViewName("Output");
-        
+
         return modelAndView;
         
     }
