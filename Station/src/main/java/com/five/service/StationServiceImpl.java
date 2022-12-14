@@ -58,6 +58,4 @@ public class StationServiceImpl implements StationService {
         return price;
 
     }
-
-   
 }
