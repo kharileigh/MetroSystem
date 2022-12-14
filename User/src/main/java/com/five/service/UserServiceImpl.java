@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 
 @Service
@@ -53,16 +54,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
-       
-        if(userDao.getUserByUserNameAndUserPassword(user.getUserName(), user.getUserPassword()) == null) {
-            
+    public User createUser(User user) throws SQLIntegrityConstraintViolationException {
+        if (getUserByUserName(user.getUserName()) == null) {
             userDao.save(user);
             return user;
-            
         } else {
-        
             return null;
         }
     }
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return userDao.getUserByUserName(userName);
+    }
+
 }

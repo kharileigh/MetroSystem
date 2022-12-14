@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 
 @RestController
@@ -21,11 +22,20 @@ public class UserResource {
     }
 
     @PostMapping(path = "/newUser", produces = MediaType.TEXT_PLAIN_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String createUserResource(@RequestBody User user) {
-        if (userService.createUser(user) == null)
+    public String createUserResource(@RequestBody User user) throws SQLIntegrityConstraintViolationException {
+        try {
+            User result = userService.createUser(user);
+            if (result == null)
+                return "User was not added.";
+            else
+                return "User successfully added.";
+        } catch (SQLIntegrityConstraintViolationException e) {
             return "User was not added.";
-        else
-            return "User successfully added";
+        }
+//        if (userService.createUser(user) == null)
+//            return "User was not added.";
+//        else
+//            return "User successfully added";
     }
 
     @GetMapping(path = "/users/{userId}", produces = MediaType.TEXT_PLAIN_VALUE)
