@@ -28,7 +28,7 @@
 <div class="display-container">
     
     <!-- table printing user ticket of single transaction -->    
-    <table>
+    <table class="display-table">
         
         <tr>
            <h3 class="display-username" th:text="'Transaction Ticket : ' + ${session.user.userName}"> </h3> 
@@ -69,8 +69,8 @@
     <div class="display-button-container">
 
          <button type="button" class="redirect-button">
-             <a href="./">
-                 <span class="text"> LOGOUT </span>
+             <a href="./home">
+                 <span class="text"> RETURN TO HOME </span>
              </a>
          </button>
 

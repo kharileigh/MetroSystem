@@ -30,11 +30,15 @@
 <div class="display-container">
     
     <!-- table printing user ticket of single transaction -->    
-    <table>
+    <table class="display-table">
         
         
         <tr>
-            <h3 class="display-username"> List of All Metro System Transactions </h3>
+            <h3 class="display-username"> Central Metro System Transactions </h3>
+        </tr>
+        
+        <tr>
+           <h1 class="display-username" th:text="${session.user.userName}"> </h1> 
         </tr>
         
         <tr>
@@ -67,8 +71,8 @@
     <div class="display-button-container">
 
          <button type="button" class="redirect-button">
-             <a href="./">
-                 <span class="text"> LOGOUT </span>
+             <a href="./home">
+                 <span class="text"> RETURN TO HOME </span>
              </a>
          </button>
 

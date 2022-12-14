@@ -237,6 +237,8 @@ h3 {
         
 }
 
+
+
 .output-container {
     align-items: center;
     border-radius: 20px;
@@ -320,29 +322,6 @@ select, .show-balance {
     width: 452px;
 }
 
-
-/*-------------- DISPLAYS TO USER --------------*/
-.display-container {
-    align-items: center;
-    border-radius: 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    position: relative;
-    
-    background-color: black;
-    opacity: 0.80;
-    width: 80%;
-    height: 70%;
-    margin: 350px auto;
-        
-     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    -moz-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
-    -webkit-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
-    
-}
-
 .balance-container {
     align-items: center;
     border-radius: 20px;
@@ -394,6 +373,53 @@ select, .show-balance {
     padding: 5px;
 }
 
+
+/*-------------- DISPLAYS TO USER --------------*/
+.display-container {
+    align-items: center;
+    border-radius: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    overflow-x: inherit;
+    position: relative;
+    
+    background-color: black;
+    opacity: 0.80;
+    width: 75%;
+    height: 100%;
+    margin: -10px auto;
+    
+        
+     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    -moz-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
+    -webkit-box-shadow: 0px 0px 44px 1px rgb(167, 88, 18), 0px 0px 44px 1px rgb(167, 88, 18);
+    
+}
+
+
+
+.display-table {
+    align-items: center;
+    border-radius: 50px;
+    box-sizing: border-box;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    margin: 15px;
+    
+    table-layout: fixed;
+    word-wrap: break-word;
+    /*width: -moz-fit-content;*/
+    width: fit-content;
+    
+}
+
+
 .display-username {
     font-size: 40px;
     font-weight: 300;
@@ -407,8 +433,8 @@ select, .show-balance {
    opacity: 0.90;
    
    font-family: monospace;
-   font-size: 20px;
-   font-weight: 300;
+   font-size: 18px;
+   font-weight: 400;
    text-align: center;
    
    padding : 15px;
@@ -422,7 +448,7 @@ select, .show-balance {
     opacity: 0.90;
     
     font-family: monospace;
-    font-size: 25px;
+    font-size: 18px;
     font-weight: 300;
     text-align: center;
     
@@ -438,7 +464,7 @@ select, .show-balance {
   margin-top: 100px;
 }
 
-.logout {
+/*.logout {
     background-color: rgb(167, 88, 18);
     border: none;
     color: white;
@@ -451,4 +477,4 @@ select, .show-balance {
     font-size: 20px;
     font-weight: 250;
     text-align: center;
-}
+}*/
