@@ -8,7 +8,7 @@ use MetroSystem;
 -- USER:
 CREATE TABLE User(
 userId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-userName VARCHAR(25) NOT NULL,
+userName VARCHAR(25) NOT NULL UNIQUE,
 userPassword VARCHAR(25) NOT NULL,
 userBalance DOUBLE NOT NULL
 );
@@ -41,10 +41,3 @@ VALUES(1, "Bank"),
 -- SHOW DATA:
 select * from User;
 select * from Station;
-
--- DROP TABLE
-DROP TABLE User;
-DROP TABLE CentralMetroSystem;
-
-SELECT * FROM CentralMetroSystem;
-SHOW COLUMNS FROM CentralMetroSystem;
