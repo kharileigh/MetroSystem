@@ -196,8 +196,8 @@ h3 {
         
 }
 
-/*-------------- LOGIN & NEW USER PAGE --------------*/
-.login-main-container, .newuser-main-container {
+/*-------------- LOGIN, NEW USER, TOP UP BALANCE PAGE --------------*/
+.login-main-container, .newuser-main-container, .topup-balance-container {
     align-items: center;
     border-radius: 20px;
     box-sizing: border-box;
