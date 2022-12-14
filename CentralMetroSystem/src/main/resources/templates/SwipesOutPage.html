@@ -33,12 +33,12 @@
     <!-- SWIPES OUT FORM -->
     <form action="./swipesOut" method="post">
         
-        <table>
+        <table class="input-table">
             
             <!-- title of form -->
             <tr>
                 <td>
-                    <h3> Please Swipe Out : </h3>
+                    <h3 th:text="'Please Swipe Out : ' + ${session.user.userName}"> </h3>
                     
                 </td>
             </tr>

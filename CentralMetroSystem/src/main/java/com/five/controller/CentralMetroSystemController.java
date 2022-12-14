@@ -180,7 +180,7 @@ public class CentralMetroSystemController {
     	String message = null;
     	
     	if(metroSystemService.balanceCheck(user.getUserId()).equals("Balance is below limit")) {	
-            message = "The amount" + user.getUserBalance() + " is less than required";
+            message = "The amount £" + user.getUserBalance() + " is less than required";
 
             modelAndView.addObject("message", message);
             modelAndView.setViewName("Output");
@@ -272,7 +272,7 @@ public class CentralMetroSystemController {
         // calculates single transaction of User's journey
         MetroSystem transaction = metroSystemService.saveTransaction(metroSystem, user.getUserId());
 
-        message = "You have successfully swiped out at " + stop + " with current balance :  " +  metroSystem.getRemainingBalance();
+        message = "You have successfully swiped out at " + stop + " with current balance :  £" +  metroSystem.getRemainingBalance();
 
 
         modelAndView.addObject("message", message);
@@ -306,7 +306,7 @@ public class CentralMetroSystemController {
         
         if(metroSystemService.updateBalancePositiveOnly(user.getUserId(), amount) != null) {
         
-            message = "Your Balance has now been increased by " + amount;
+            message = "Your Balance has now been increased by £" + amount;
             
         } else {
         
@@ -331,6 +331,8 @@ public class CentralMetroSystemController {
         return new ModelAndView("ShowCurrentBalance");
     }
     
+    
+    // CURRENT ERROR : starter balance not found
     //------- SHOW CURRENT BALANCE
     @RequestMapping("/showCurrentBalance")
     public ModelAndView showCurrentBalanceController(HttpSession session) {
@@ -371,11 +373,7 @@ public class CentralMetroSystemController {
     }
     
     
-    //==========================================================================
-    //------- SHOW ALL TRANSACTIONS
-    
-    
-    
+    // CURRENT ERROR : Property or field 'starterBalance' cannot be found on object of type 'java.util.ArrayList'
     //==========================================================================
     //-------  SHOW TRANSACTIONS BY USER ID
     @RequestMapping("/showTransactionsPage")

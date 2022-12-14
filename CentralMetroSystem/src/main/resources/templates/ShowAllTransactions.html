@@ -6,8 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+ 
     <!-- External Cascading Style Sheet -->
     <link th:href="@{/styles/metro.css}" rel="stylesheet" />
 </head>
@@ -17,38 +16,36 @@
 <nav class="navbar">
     <div class="container-fluid">
         <div class="button-container">
-        <a class="navbar-image" href="#">
-            <img alt="MetroLogo" th:src="@{/images/metro.gif}">
-        </a>
+            <a class="navbar-image" href="#">
+                <img alt="MetroLogo" th:src="@{/images/metro.gif}">
+            </a>
         </div>
-        <!--  Top Up Balance </h1> --><h1>
+   
     </div>
 </nav>
   
 <br></br>
 
 <!-- MAIN CONTENT -->
-<div class="main-container">
+<div class="display-container">
     
     <!-- table printing user ticket of single transaction -->    
     <table>
         
         
         <tr>
-            <td>
-                <h3> List of All Metro System Transactions </h3>
-            </td>
+            <h3 class="display-username"> List of All Metro System Transactions </h3>
         </tr>
         
         <tr>
-            <th> User ID </th>
-            <th> Starter Balance </th>
-            <th> Source Station </th>
-            <th> Source Swipe In Date & Time </th>
-            <th> Remaining Balance </th>
-            <th> Destination Station </th>
-            <th> Destination Swipe In Date & Time </th>
-            <th> Total Cost of Journey </th>
+            <th class="header"> User ID </th>
+            <th class="header"> Starter Balance </th>
+            <th class="header"> Source Station </th>
+            <th class="header"> Source Swipe In Date & Time </th>
+            <th class="header"> Remaining Balance </th>
+            <th class="header"> Destination Station </th>
+            <th class="header"> Destination Swipe In Date & Time </th>
+            <th class="header"> Total Cost of Journey </th>
         </tr>
 
         <!-- map transaction object to table  -->
@@ -63,18 +60,19 @@
             <td class="show" th:text="${metroSystemList.destinationSwipeOutDateTime}">
             <td class="show" th:text="${metroSystemList.price}">
         </tr>
-       
-        
-        <!-- return to home -->
-        <tr>
-            <td class="logout">
-                <a href="./"> Logout </a>
-            </td>
-        </tr>
 
 
     </table>
-        
+    
+    <div class="display-button-container">
+
+         <button type="button" class="redirect-button">
+             <a href="./">
+                 <span class="text"> LOGOUT </span>
+             </a>
+         </button>
+
+     </div>
    
 </div>
     
