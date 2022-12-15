@@ -51,7 +51,7 @@ public class CentralMetroSystemServiceImpl implements CentralMetroSystemService 
 
 
         // check user has been added
-        if(!("User not added").equals(message)) {
+        if(("User successfully added.").equals(message)) {
 
             return loginCheck(userName, userPassword);
 

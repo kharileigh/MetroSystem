@@ -111,16 +111,14 @@ public class CentralMetroSystemController {
 
             if (newUser.getUserBalance().compareTo(new BigDecimal("0")) >= 0) {
 
-                metroSystemService.addNewUser(newUser.getUserName(), newUser.getUserPassword(), newUser.getUserBalance());
-
-                User user = metroSystemService.loginCheck(newUser.getUserName(), newUser.getUserPassword());
+                User user = metroSystemService.addNewUser(newUser.getUserName(), newUser.getUserPassword(), newUser.getUserBalance());
 
 
                 // successfully added a new user
-                if (newUser != null) {
+                if (user != null) {
 
                     modelAndView.setViewName("HomePage");
-                    modelAndView.addObject("newUser", newUser);
+                    modelAndView.addObject("user", user);
                     session.setAttribute("user", user);
 
                     // falls to create new user
