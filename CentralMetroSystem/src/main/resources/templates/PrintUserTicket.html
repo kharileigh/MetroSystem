@@ -25,13 +25,17 @@
 <br></br>
 
 <!-- MAIN CONTENT -->
-<div class="ticket-display-container">
+<div class="display-container">
     
     <!-- table printing user ticket of single transaction -->    
-    <table class="display-table">
+    <table class="ticket-display-table">
         
         <tr>
-           <h3 class="display-username" th:text="'Transaction Ticket : ' + ${session.user.userName}"> </h3> 
+            <h3 class="display-username"> Central Metro System Ticket </h3>
+        </tr>
+        
+        <tr>
+           <h1 class="display-username" th:text="${session.user.userName}"> </h1> 
         </tr>
         
         <tr>

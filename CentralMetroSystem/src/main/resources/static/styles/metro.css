@@ -457,7 +457,7 @@ select, .show-balance {
    font-weight: 400;
    text-align: center;
    
-   padding : 15px;
+   padding : 10px;
    
 }
 
@@ -468,11 +468,11 @@ select, .show-balance {
     opacity: 0.90;
     
     font-family: monospace;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 300;
     text-align: center;
     
-    padding: 3.5px;
+    padding: 4px;
 }
 
 .display-button-container {
