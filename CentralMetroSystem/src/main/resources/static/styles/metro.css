@@ -389,7 +389,7 @@ select, .show-balance {
     opacity: 0.80;
     width: 75%;
     height: 100%;
-    margin: -10px auto;
+    margin: -20px auto;
     
         
      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
@@ -399,8 +399,7 @@ select, .show-balance {
 }
 
 
-
-.display-table {
+.ticket-display-table {
     align-items: center;
     border-radius: 50px;
     box-sizing: border-box;
@@ -410,7 +409,7 @@ select, .show-balance {
     justify-content: center;
     position: relative;
     padding: 20px;
-    margin: 15px;
+    margin: 20px;
     
     table-layout: fixed;
     word-wrap: break-word;
@@ -419,6 +418,27 @@ select, .show-balance {
     
 }
 
+.full-transactions-display-table {
+    align-items: center;
+    border-radius: 50px;
+    box-sizing: border-box;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding-left: 70px;
+    padding-right: 70px;
+    padding-bottom: 10px;
+    padding-top: -150px;
+    margin: 100px;
+    
+    table-layout: fixed;
+    word-wrap: break-word;
+    /*width: -moz-fit-content;*/
+    max-width: fit-content;
+    
+}
 
 .display-username {
     font-size: 40px;
@@ -433,7 +453,7 @@ select, .show-balance {
    opacity: 0.90;
    
    font-family: monospace;
-   font-size: 18px;
+   font-size: 19px;
    font-weight: 400;
    text-align: center;
    
@@ -452,7 +472,7 @@ select, .show-balance {
     font-weight: 300;
     text-align: center;
     
-    padding: 5px;
+    padding: 3.5px;
 }
 
 .display-button-container {

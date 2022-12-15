@@ -17,11 +17,10 @@
 <nav class="navbar">
     <div class="container-fluid">
         <div class="button-container">
-        <a class="navbar-image" href="#">
-            <img alt="MetroLogo" th:src="@{/images/metro.gif}">
-        </a>
+            <a class="navbar-image" href="#">
+                <img alt="MetroLogo" th:src="@{/images/metro.gif}">
+            </a>
         </div>
-        <h1> Top Up Balance </h1>
     </div>
 </nav>
   
@@ -35,10 +34,9 @@
         
         <table class="input-table">
             
-            <!-- title of form -->
             <tr>
                 <td>
-                    <h3> Please enter Amount : </h3>
+                    <h3 class="balance-header" th:text="' Please Enter Amount ' + ${session.user.userName} + ':'"></h3>
                 </td>
             </tr>
             
