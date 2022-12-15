@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +19,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import com.five.entity.MetroSystem;
+import com.five.entity.MetroSystemList;
 import com.five.entity.User;
 import com.five.model.persistence.CentralMetroSystemDao;
 import com.five.model.service.CentralMetroSystemServiceImpl;
@@ -69,6 +73,8 @@ class ClientApplicationTests {
 	void testSaveTransationTrue() {
 		MetroSystem metroSystem = new MetroSystem();
 		
+		MetroSystem metroSystem2 = new MetroSystem();
+		
 		//set source station
 		metroSystem.setSourceStation("Bank");
 		
@@ -98,16 +104,56 @@ class ClientApplicationTests {
         
         metroSystem.setPrice(price);
         
+        metroSystem2 = metroSystem;
+        
         //the remaining balance from user.3 should be £9
         BigDecimal balance = new BigDecimal("9");
         
-        		
+        //set the remaining balance into the other metroSystem object
+        metroSystem2.setRemainingBalance(balance);
+        
+        //set update balance into a variable
+        metroService.updateBalance(3, price.negate());
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        HttpEntity<User> entity = new HttpEntity<User>(headers);
+        
+        User user = new User();
+        user.setUserId(3);
+        user.setUserName("Lidija");
+        user.setUserBalance(balance);
+        
         //check that the remaining balance was set correctly
-        when(restTemplate.getForEntity("http://localhost:8084/users/" + 3 + "/" + price.negate(), HttpMethod.PUT, User.class).getBody()).thenReturn(3, price.negate()));
-//        when(metroDao.searchMetroSystemByUserIdAndDestinationSwipeOutDateTime(3, outDateTime)).thenReturn(metroSystem);
-//        assertEquals(balance, metroService.saveTransaction(metroSystem, 3).getRemainingBalance());
+        when(restTemplate.exchange("http://localhost:8084/users/" + 3 + "/" + price, HttpMethod.PUT, entity, User.class).getBody()).thenReturn(user);
+        when(metroDao.searchMetroSystemByUserIdAndDestinationSwipeOutDateTime(3, outDateTime)).thenReturn(metroSystem2);
+        assertEquals(balance, metroService.saveTransaction(metroSystem, 3).getRemainingBalance());
 	}
 	
-	//TESTING THE 'SHOW TRANSACTION HISTORY' METHOD:
-	//TESTING THE 'GET ALL STATIONS' METHOD:
+		//TESTING THE 'SHOW TRANSACTION HISTORY' METHOD:
+		@DisplayName("2. Testing 'showTransactionHistory'")
+		@Test
+		void testShowTransactionHistory() {
+			List<MetroSystem> metroSystemList = new ArrayList<>();
+			
+			 BigDecimal starterBalance = new BigDecimal("12");
+			 BigDecimal remainingBalance = new BigDecimal("9");
+			 BigDecimal price = new BigDecimal("3");
+			 
+			 LocalDateTime inLocalDateTime = LocalDateTime.now();
+		     String inDateTime = inLocalDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+		     
+		     LocalDateTime outLocalDateTime = LocalDateTime.now();
+		     String outDateTime = outLocalDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+			
+		     metroSystemList.add(new MetroSystem(1, 3, starterBalance, remainingBalance, price, "Bank", "Croydon", inDateTime, outDateTime));
+		     
+		     MetroSystemList metroSystemLists = new MetroSystemList();
+		     metroSystemLists.setFares(metroSystemList);
+		     
+		     //check the show transaction methods:
+		     when(metroDao.searchMetroSystemByUserId(3)).thenReturn(metroSystemList);
+		     assertEquals(metroSystemLists, metroService.showTransactionHistory(3));
+	
+	}
 }
