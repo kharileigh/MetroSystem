@@ -288,7 +288,7 @@ public class CentralMetroSystemController {
 
         message = "You have successfully swiped out at " + stop + " with current balance :  £" +  metroSystem.getRemainingBalance();
 
-
+        user.setUserBalance(user.getUserBalance().subtract(transaction.getPrice()));
         modelAndView.addObject("message", message);
         modelAndView.addObject("transaction", transaction);
         session.setAttribute("user", user);
